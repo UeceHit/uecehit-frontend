@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;700&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Noto Sans Gujarati', sans-serif;
+  background-color: #8EA4CF; /* fundo azul suave */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* === CONTAINER PRINCIPAL === */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* === CAIXA DO LOGIN === */
+.login-box {
+  display: flex;
+  width: 1300px;
+  height: 800px;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+/* === LADO AZUL (FORMULÁRIO) === */
+.login-left {
+  flex: 1;
+  background: linear-gradient(180deg, #3366cc 0%, #69a1ff 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding-left: 80px;
+  padding-right: 80px;
+  position: relative;
+}
+
+/* === TÍTULO E SUBTÍTULO === */
+.login-title {
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0;
+  margin-top: 60px; /* 60px do topo do quadrado */
+}
+
+.hit-h {
+  color: #E1A919; /* dourado */
+}
+
+.hit-i {
+  color: #C64139; /* vermelho */
+}
+
+.hit-t {
+  color: #26276B; /* azul escuro */
+}
+
+.login-subtitle {
+  font-size: 24px;
+  font-weight: 400;
+  margin: 12px 0 0 0; /* 12px abaixo do título */
+}
+
+/* === TEXTO DE BOAS-VINDAS === */
+.login-welcome {
+  font-size: 18px;
+  margin-top: 80px; /* 80px abaixo do subtítulo */
+  margin-bottom: 45px; /* 45px antes do primeiro input */
+}
+
+/* === CAMPOS === */
+.login-input {
+  width: 520px;
+  height: 60px;
+  border-radius: 8px;
+  border: none;
+  padding: 0 15px;
+  font-size: 18px;
+  margin-bottom: 35px; /* 35px entre os dois inputs */
+}
+
+.login-input:focus {
+  outline: 2px solid #E1A919;
+}
+
+/* === OPÇÕES === */
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+.login-options a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.login-options a:hover {
+  text-decoration: underline;
+}
+
+/* === BOTÃO === */
+.login-button {
+  width: 520px;
+  height: 60px;
+  background-color: #26276B;
+  color: white;
+  font-size: 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.1s;
+}
+
+.login-button:hover {
+  background-color: #1E1F57;
+}
+
+.login-button:active {
+  transform: scale(0.98);
+}
+
+/* === LINK DE CRIAR CONTA === */
+.login-register {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.login-register a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* === LADO DA IMAGEM === */
+.login-right {
+  flex: 1;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-right img {
+  width: 480px;
+  height: auto;
+  animation: float 4s ease-in-out infinite;
+}
+
+/* === Animação sutil da imagem === */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
