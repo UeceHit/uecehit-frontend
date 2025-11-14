@@ -47,7 +47,7 @@ export default function LoginPage() {
 
         {/* Lado direito */}
         <div className="login-right">
-          <img src="/assets/login-image.PNG" alt="Ilustração" />
+          <img src="/assets/login-image.png" alt="Ilustração" />
         </div>
       </div>
     </div>
