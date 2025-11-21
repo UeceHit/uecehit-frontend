@@ -6,7 +6,6 @@ export default function LoginPage() {
   return (
     <div className="login-container">
       <div className="login-box">
-        {/* Lado esquerdo */}
         <div className="login-left">
           <h1 className="login-title">
             Uece
@@ -45,7 +44,6 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Lado direito */}
         <div className="login-right">
           <img src="/assets/login-image.PNG" alt="Ilustração" />
         </div>
