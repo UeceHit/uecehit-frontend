@@ -6,3 +6,12 @@ export default function Login() {
     </div>
   );
 }
+
+export default function ForgotPassword() {
+  return (
+    <div>
+      <h1>Esqueci a Senha</h1>
+      <p>Página de recuperação de senha</p>
+    </div>
+  );
+}
