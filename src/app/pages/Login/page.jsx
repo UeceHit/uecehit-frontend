@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import "./style.css";
+import Link from "next/link";
 
 export default function LoginPage() {
   return (
@@ -35,13 +36,17 @@ export default function LoginPage() {
             <label>
               <input type="checkbox" /> Lembre de mim
             </label>
-            <a href="#">Esqueceu a senha?</a>
+
+            {/* 🔥 CORRIGIDO: agora vai para /pages/EsqueciSenha */}
+            <Link href="/pages/EsqueciSenha">Esqueceu a senha?</Link>
           </div>
 
           <button className="login-button">Log In</button>
 
           <p className="login-register">
-            Não tem uma conta? <a href="#">Crie sua conta</a>
+            Não tem uma conta?{" "}
+            {/* 🔥 CORRIGIDO: agora vai para /pages/Register */}
+            <Link href="/pages/Register">Crie sua conta</Link>
           </p>
         </div>
 

@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;700&display=swap');
+
+* {
+  font-family: 'Noto Sans Gujarati', sans-serif !important;
+}
+
+/* reset / fonte */
+:root {
+  --purple-700: #292d7d;
+  --purple-600: #3b328f;
+  --bg-blue: #8ea5d9;
+}
+
+/* wrapper full screen com fundo azul do mock */
+.page-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+/* cartão branco arredondado com sombra (o card principal) */
+.outer-card {
+  width: 100%;
+  max-width: 1200px;
+  height: 680px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+  display: flex;
+  overflow: hidden;
+}
+
+/* painel esquerdo com gradiente e padding geral */
+.left-panel {
+  width: 55%;
+  background: linear-gradient(180deg, #3366cc 0%, #69a1ff 100%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+
+/* inner alinhado à esquerda visualmente, mas centralizado verticalmente */
+.left-inner {
+  width: 86%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: #ffffff;
+}
+
+/* título da marca recuado 68px (porém já estamos dentro do container, então ajusto via margin-left) */
+.brand-title {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-size: 44px;
+  font-weight: 800;
+  margin-left: 68px; /* PEDIDO: distância de 68 da margem */
+  margin-top: 6px;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+/* letras do "Hit" coloridas, mantendo a mesma linha do título */
+.hit-h { color: #e9be00; }
+.hit-i { color: #ef4b4b; }
+.hit-t { color: #2d2d86; }
+
+/* subtítulo sem negrito, alinhado à esquerda com mesmo recuo de 68px */
+.brand-sub {
+  margin-left: 68px; /* mesma distância */
+  margin-top: 6px;
+  margin-bottom: 70px; /* distancia para o próximo bloco: pedida explicitamente 70px até "Esqueceu a senha?" */
+  font-size: 18px;
+  font-weight: 400; /* NÃO em negrito */
+  opacity: 0.95;
+}
+
+/* Título principal do formulário centralizado dentro do painel (visualmente fica centralizado) */
+.forgot-main {
+  width: 100%;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 auto 8px auto;
+}
+
+/* subtitulo explicativo abaixo do forgot-main */
+.forgot-sub {
+  width: 100%;
+  text-align: center;
+  margin: 0 0 28px 0;
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+/* input-wrap centralizado */
+.input-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0; /* botão terá margem-top: 80px */
+}
+
+/* input estilo 'pill' com sombra */
+.email-input {
+  width: 78%;
+  max-width: 520px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: none;
+  font-size: 15px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+  outline: none;
+  background: white;
+  color: #333;
+}
+
+/* foco sutil */
+.email-input:focus {
+  box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+}
+
+/* botão com margem-top de 80px a partir do input (pedido) */
+.reset-button {
+  display: block;
+  margin: 80px auto 16px auto; /* 80px de distância do input */
+  padding: 14px 26px;
+  background: #2d275d;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(45,39,93,0.28);
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+
+/* hover */
+.reset-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(45,39,93,0.28);
+}
+
+/* link voltar - alinhado centralmente abaixo do botão */
+.back-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.back-link {
+  color: rgba(255,255,255,0.92);
+  text-decoration: none;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.95;
+}
+
+/* painel direito com imagem */
+.right-panel {
+  width: 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+}
+
+/* ilustração dimensionada similar ao mock */
+.illustration {
+  width: 66%;
+  height: auto;
+  object-fit: contain;
+}
