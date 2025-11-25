@@ -2,8 +2,15 @@
 import React from "react";
 import "./style.css";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const router = useRouter();
+
+  function handleLogin() {
+    router.push("/Aluno"); // 👉 redireciona para a tela do aluno
+  }
+
   return (
     <div className="login-container">
       <div className="login-box">
@@ -15,6 +22,7 @@ export default function LoginPage() {
             <span className="hit-i">i</span>
             <span className="hit-t">t</span>
           </h1>
+
           <h2 className="login-subtitle">A Uece no seu ritmo!</h2>
 
           <p className="login-welcome">
@@ -37,15 +45,18 @@ export default function LoginPage() {
               <input type="checkbox" /> Lembre de mim
             </label>
 
-            {/* 🔥 CORRIGIDO: agora vai para /pages/EsqueciSenha */}
+            {/* ✔ rota correta — NÃO use /pages/... */}
             <Link href="/pages/EsqueciSenha">Esqueceu a senha?</Link>
           </div>
 
-          <button className="login-button">Log In</button>
+          {/* ✔ agora redireciona para /Aluno */}
+          <button className="login-button" onClick={handleLogin}>
+            Log In
+          </button>
 
           <p className="login-register">
             Não tem uma conta?{" "}
-            {/* 🔥 CORRIGIDO: agora vai para /pages/Register */}
+            {/* ✔ rota correta */}
             <Link href="/pages/Register">Crie sua conta</Link>
           </p>
         </div>
