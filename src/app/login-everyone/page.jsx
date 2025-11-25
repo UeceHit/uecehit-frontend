@@ -40,18 +40,16 @@ export default function LoginPage() {
               <input type="checkbox" /> Lembre de mim
             </label>
 
-            {/* ✔ rota correta — NÃO use /pages/... */}
+            {/* Rota correta */}
             <Link href="/pages/EsqueciSenha">Esqueceu a senha?</Link>
           </div>
 
-          {/* ✔ agora redireciona para /Aluno */}
           <button className="login-button" onClick={handleLogin}>
             Log In
           </button>
 
           <p className="login-register">
             Não tem uma conta?{" "}
-            {/* ✔ rota correta */}
             <Link href="/pages/Register">Crie sua conta</Link>
           </p>
         </div>
