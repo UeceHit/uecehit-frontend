@@ -8,12 +8,14 @@ export default function LoginPage() {
   const router = useRouter();
 
   function handleLogin() {
-    router.push("/Aluno"); // 👉 redireciona para a tela do aluno
+    router.push("/aluno"); // 👉 redireciona para o dashboard do aluno
   }
 
   return (
     <div className="login-container">
       <div className="login-box">
+        
+        {/* LADO ESQUERDO */}
         <div className="login-left">
           <h1 className="login-title">
             Uece
@@ -40,8 +42,10 @@ export default function LoginPage() {
               <input type="checkbox" /> Lembre de mim
             </label>
 
-            {/* Rota correta */}
-            <Link href="/pages/EsqueciSenha">Esqueceu a senha?</Link>
+            {/* 🚀 ROTA CORRETA NO APP ROUTER */}
+            <Link href="/login-everyone/esqueci-senha">
+              Esqueceu a senha?
+            </Link>
           </div>
 
           <button className="login-button" onClick={handleLogin}>
@@ -50,10 +54,11 @@ export default function LoginPage() {
 
           <p className="login-register">
             Não tem uma conta?{" "}
-            <Link href="/pages/Register">Crie sua conta</Link>
+            <Link href="/register-teacher">Crie sua conta</Link>
           </p>
         </div>
 
+        {/* LADO DIREITO */}
         <div className="login-right">
           <img src="/assets/login-image.png" alt="Ilustração" />
         </div>

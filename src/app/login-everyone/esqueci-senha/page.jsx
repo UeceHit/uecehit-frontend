@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import "./style.css";
 
-export default function EsqueciSenha() {
+export default function EsqueciSenhaPage() {
   return (
     <div className="page-wrapper">
       <div className="outer-card">
@@ -41,17 +41,16 @@ export default function EsqueciSenha() {
             <button className="reset-button">Resetar Senha</button>
 
             <div className="back-wrap">
-              <Link href="/pages/Login" className="back-link">
-                ‹ Voltar a tela de LogIn
+              {/* ✔ rota corrigida — App Router usa /login-everyone */}
+              <Link href="/login-everyone" className="back-link">
+                ‹ Voltar à tela de Login
               </Link>
             </div>
           </div>
         </div>
 
-        {/* LADO DIREITO – sem imagem, mas com o espaço reservado */}
-        <div className="right-panel placeholder-panel">
-          {/* futuro espaço da imagem */}
-        </div>
+        {/* LADO DIREITO – reservado para imagem futura */}
+        <div className="right-panel placeholder-panel"></div>
 
       </div>
     </div>
