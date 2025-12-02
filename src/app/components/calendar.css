@@ -1,3 +1,17 @@
+/* ========================= */
+/* 📌 IMPORTAÇÃO DAS FONTES */
+/* ========================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Nova+Flat&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600&display=swap");
+
+
+
+/* ========================= */
+/* 📌 ESTILOS DO CALENDÁRIO */
+/* ========================= */
+
 .calendar-wrapper {
   width: 100%;
   padding: 20px 40px;

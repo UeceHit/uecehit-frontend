@@ -13,31 +13,43 @@ export default function Calendar({ view = "mês", setView }) {
   ];
 
   function prevMonth() {
+  if (view === "dia") {
+    setDate(prev => new Date(prev.getFullYear(), prev.getMonth(), prev.getDate() - 1));
+  } else if (view === "semana") {
+    setDate(prev => new Date(prev.getFullYear(), prev.getMonth(), prev.getDate() - 7));
+  } else {
     setDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
   }
+}
 
-  function nextMonth() {
+function nextMonth() {
+  if (view === "dia") {
+    setDate(prev => new Date(prev.getFullYear(), prev.getMonth(), prev.getDate() + 1));
+  } else if (view === "semana") {
+    setDate(prev => new Date(prev.getFullYear(), prev.getMonth(), prev.getDate() + 7));
+  } else {
     setDate(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
   }
+}
 
   const year = date.getFullYear();
   const month = date.getMonth();
 
-  // 🔶 MENSAL
+  // --- MENSAL ---
   const firstWeekday = new Date(year, month, 1).getDay();
-  const adjustedFirstWeekday = (firstWeekday === 0 ? 6 : firstWeekday - 1);
+  const adjustedFirstWeekday = firstWeekday === 0 ? 6 : firstWeekday - 1;
   const lastDay = new Date(year, month + 1, 0).getDate();
 
   const daysMonth = [];
   for (let i = 0; i < adjustedFirstWeekday; i++) daysMonth.push("");
   for (let i = 1; i <= lastDay; i++) daysMonth.push(i);
 
-  // 🔶 SEMANAL
+  // --- SEMANAL ---
   const weekDays = ["SEG", "TER", "QUA", "QUI", "SEX", "SÁB", "DOM"];
 
   function getCurrentWeek() {
     const current = new Date(date);
-    const weekday = (current.getDay() === 0 ? 6 : current.getDay() - 1);
+    const weekday = current.getDay() === 0 ? 6 : current.getDay() - 1;
     const monday = new Date(current);
     monday.setDate(current.getDate() - weekday);
 
@@ -52,16 +64,16 @@ export default function Calendar({ view = "mês", setView }) {
 
   const week = getCurrentWeek();
 
-  // 🔶 DIÁRIO
+  // --- DIÁRIO ---
   const hours = [];
-  for (let h = 7; h <= 22; h++) {
+  for (let h = 6; h <= 21; h++) {
     hours.push(`${String(h).padStart(2, "0")}:00`);
   }
 
   return (
     <div className="calendar-wrapper">
-
-      {/* 🔵 Botões DIA / SEMANA / MÊS */}
+      
+      {/* 🔵 Switch DIA / SEMANA / MÊS */}
       <div className="calendar-mode-selector">
         {["dia", "semana", "mês"].map((m) => (
           <button
@@ -76,23 +88,45 @@ export default function Calendar({ view = "mês", setView }) {
       </div>
 
       {/* Cabeçalho */}
-      <div className="calendar-header">
-        <button onClick={prevMonth} className="arrow-btn">
-          <ChevronLeft size={30} strokeWidth={1.5} />
-        </button>
+      <div
+        className="calendar-header"
+        style={{ flexDirection: "column", gap: "4px", textAlign: "center" }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "40px", justifyContent: "center" }}>
+          <button onClick={prevMonth} className="arrow-btn">
+            <ChevronLeft size={30} strokeWidth={1.5} />
+          </button>
 
-        <h2>{monthNames[month]} {year}</h2>
+          <h2>{monthNames[month]} {year}</h2>
 
-        <button onClick={nextMonth} className="arrow-btn">
-          <ChevronRight size={30} strokeWidth={1.5} />
-        </button>
+          <button onClick={nextMonth} className="arrow-btn">
+            <ChevronRight size={30} strokeWidth={1.5} />
+          </button>
+        </div>
+
+        {/* Número do dia (somente no modo DIA) */}
+        {view === "dia" && (
+          <div
+            style={{
+              fontFamily: "Noto Sans Gujarati",
+              fontSize: "28px",
+              fontWeight: 600,
+              color: "#424040",
+              marginTop: "-6px",
+            }}
+          >
+            {String(date.getDate()).padStart(2, "0")}
+          </div>
+        )}
       </div>
 
-      {/* 🔶 MÊS */}
+      {/* 🟦 MÊS */}
       {view === "mês" && (
         <>
           <div className="calendar-weekdays">
-            {weekDays.map((w, i) => <span key={i}>{w}</span>)}
+            {weekDays.map((w, i) => (
+              <span key={i}>{w}</span>
+            ))}
           </div>
 
           <div className="calendar-grid">
@@ -105,31 +139,131 @@ export default function Calendar({ view = "mês", setView }) {
         </>
       )}
 
-      {/* 🔶 SEMANA */}
+      {/* 🟩 SEMANA */}
       {view === "semana" && (
-        <>
-          <div className="calendar-weekdays">
-            {weekDays.map((w, i) => <span key={i}>{w}</span>)}
-          </div>
+        <div style={{ width: "100%", height: "100%" }}>
 
-          <div className="calendar-grid-week">
+          {/* Cabeçalho dos dias */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "120px repeat(7, 1fr)",
+              alignItems: "center",
+              marginBottom: "10px",
+            }}
+          >
+            <div></div> {/* coluna vazia */}
+
             {week.map((d, i) => (
-              <div key={i} className="calendar-cell-week">
-                <span className="day-number">
+              <div key={i} style={{ textAlign: "center", color: "#424040" }}>
+                
+                <div
+                  style={{
+                    fontFamily: "Nova Flat",
+                    fontSize: "24px",
+                    fontWeight: 400,
+                  }}
+                >
+                  {weekDays[i]}
+                </div>
+
+                <div
+                  style={{
+                    fontFamily: "Noto Sans Gujarati",
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    marginTop: "-4px",
+                  }}
+                >
                   {String(d.getDate()).padStart(2, "0")}
-                </span>
+                </div>
               </div>
             ))}
           </div>
-        </>
+
+          {/* Corpo: SOMENTE LINHAS VERTICAIS */}
+          <div style={{ display: "flex", width: "100%" }}>
+            
+            {/* horários */}
+            <div style={{ width: "120px" }}>
+              {hours.map((hr, index) => (
+                <div
+                  key={index}
+                  style={{
+                    height: "50px",
+                    display: "flex",
+                    alignItems: "center",
+                    fontSize: "14px",
+                    color: "#424040",
+                  }}
+                >
+                  {hr}
+                </div>
+              ))}
+            </div>
+
+            {/* Linhas verticais */}
+            <div
+              style={{
+                flex: 1,
+                position: "relative",
+                display: "grid",
+                gridTemplateColumns: "repeat(7, 1fr)",
+              }}
+            >
+              {Array.from({ length: 7 }).map((_, colIndex) => (
+                <div
+                  key={colIndex}
+                  style={{
+                    borderLeft: "1px solid #d9d9d9",
+                    height: "100%",
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
       )}
 
-      {/* 🔶 DIA */}
+      {/* 🟥 DIA */}
       {view === "dia" && (
-        <div className="calendar-day-view">
-          {hours.map((h, i) => (
-            <div key={i} className="calendar-hour-row">
-              <span className="hour-label">{h}</span>
+        <div
+          style={{
+            width: "100%",
+            paddingLeft: "10px",
+            position: "relative",
+            fontFamily: "Noto Sans Gujarati",
+          }}
+        >
+          {hours.map((hour, index) => (
+            <div
+              key={index}
+              style={{
+                height: "50px",
+                display: "flex",
+                alignItems: "center",
+                position: "relative",
+              }}
+            >
+              <span
+                style={{
+                  width: "60px",
+                  fontSize: "14px",
+                  color: "#424040",
+                  fontWeight: 600,
+                }}
+              >
+                {hour}
+              </span>
+
+              <div
+                style={{
+                  flex: 1,
+                  height: "1px",
+                  backgroundColor: "#d9d9d9",
+                  marginLeft: "10px",
+                }}
+              />
             </div>
           ))}
         </div>
@@ -137,3 +271,6 @@ export default function Calendar({ view = "mês", setView }) {
     </div>
   );
 }
+
+
+
