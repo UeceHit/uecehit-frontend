@@ -7,17 +7,16 @@
   font-family: "Noto Sans Gujarati", sans-serif;
 }
 
-
-/* ===========================
+/* ============================
    SIDEBAR (FECHADA / ABERTA)
-=========================== */
+============================ */
 
 .sidebar {
   position: fixed;
   left: 0;
-  top: 110px; /* começa logo abaixo do header */
+  top: 110px;
   height: calc(100vh - 110px);
-  width: 65px; /* FECHADA */
+  width: 65px;
   background: #e3e3e3;
   border-right: 1px solid #c9c9c9;
   transition: width 0.25s ease-in-out;
@@ -28,12 +27,12 @@
 }
 
 .sidebar.open {
-  width: 260px; /* ABERTA */
+  width: 260px;
 }
 
-/* ===========================
-   BOTÃO MENU (HAMBURGUER)
-=========================== */
+/* ============================
+   BOTÃO MENU
+============================ */
 
 .menu-btn {
   width: 100%;
@@ -50,9 +49,9 @@
   color: #555;
 }
 
-/* ===========================
+/* ============================
    PRIMEIRA SEÇÃO
-=========================== */
+============================ */
 
 .sidebar-section {
   padding: 10px 20px;
@@ -62,36 +61,43 @@
 .sidebar-item {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 15px 0;
+  justify-content: center; /* centralizado */
+  gap: 12px;
+  padding: 18px 0;
   cursor: pointer;
 }
 
 .sidebar-item svg {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   color: #424040;
 }
 
 .sidebar-item span {
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
   color: #424040;
 }
 
-/* ===========================
-   TÍTULOS (Turmas / Grupos)
-=========================== */
+/* Criar Grupo com espaço extra abaixo */
+.sidebar-section .sidebar-item:first-child {
+  margin-bottom: 50px; /* distância pedida */
+}
+
+/* ============================
+   TÍTULOS
+============================ */
 
 .sidebar-title {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 17px;
+  font-size: 20px;     /* AQUI → tamanho atualizado */
   font-weight: 600;
   color: #5d5d5d;
   margin: 18px 0 10px 0;
 }
+
 
 .sidebar-title svg {
   width: 18px;
@@ -99,9 +105,14 @@
   color: #5d5d5d;
 }
 
-/* ===========================
-   TURMAS / GRUPOS – ITENS
-=========================== */
+/* para clicar */
+.toggle-title {
+  cursor: pointer;
+}
+
+/* ============================
+   SUBITENS
+============================ */
 
 .sidebar-subitem {
   display: flex;
@@ -127,31 +138,49 @@
 }
 
 .sidebar-subitem span {
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
   line-height: 15px;
 }
 
-/* ===========================
-   LOGOUT — FICA FIXADO EM BAIXO
-=========================== */
+/* ============================
+   LOGOUT CENTRALIZADO
+============================ */
 
-.sidebar-footer {
+.logout-center {
   margin-top: auto;
-  padding: 15px 20px;
+  margin-bottom: 30px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
+  cursor: pointer;
+  padding: 12px 0;
+  transition: background 0.2s ease;
+  border-radius: 8px;
 }
 
-.sidebar-footer svg {
-  width: 20px;
-  height: 20px;
-  color: #424040;
+.logout-center:hover {
+  background: #d5d5d5;
 }
 
-.sidebar-footer span {
-  font-size: 15px;
-  color: #424040;
+/* ============================
+   ANIMAÇÃO (Slide + Fade)
+============================ */
+
+.sidebar-collapse {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-5px);
+  transition:
+    max-height 0.35s ease,
+    opacity 0.25s ease,
+    transform 0.35s ease;
 }
 
+.sidebar-collapse.open {
+  max-height: 500px;
+  opacity: 1;
+  transform: translateY(0);
+}
