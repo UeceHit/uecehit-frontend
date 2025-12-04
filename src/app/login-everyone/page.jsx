@@ -1,8 +1,16 @@
 "use client";
 import React from "react";
 import "./style.css";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const router = useRouter();
+
+  const handleGoToRegister = (e) => {
+    e.preventDefault();
+    router.push("/register-teacher");
+  };
+
   return (
     <div className="login-container">
       <div className="login-box">
@@ -24,24 +32,25 @@ export default function LoginPage() {
             className="login-input"
             placeholder="Email institucional"
           />
-          <input
-            type="password"
-            className="login-input"
-            placeholder="Senha"
-          />
+          <input type="password" className="login-input" placeholder="Senha" />
 
           <div className="login-options">
             <label>
               <input type="checkbox" /> Lembre de mim
             </label>
-            <a href="#">Esqueceu a senha?</a>
+            <a href="#" onClick={(e) => e.preventDefault()}>
+              Esqueceu a senha?
+            </a>
           </div>
 
           <button className="login-button">Log In</button>
 
-          <p className="login-register">
-            Não tem uma conta? <a href="#">Crie sua conta</a>
-          </p>
+          <div className="login-register">
+            Não tem uma conta?{" "}
+            <a href="/register-teacher" onClick={handleGoToRegister}>
+              Criar conta
+            </a>
+          </div>
         </div>
 
         <div className="login-right">
