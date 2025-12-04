@@ -1,0 +1,123 @@
+/* ============================
+   FONTE GLOBAL
+============================ */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@300;400;700&display=swap");
+
+* {
+  font-family: "Noto Sans Gujarati", sans-serif;
+}
+
+/* ============================
+   HEADER
+============================ */
+.header {
+  width: 100%;
+  height: 110px;
+
+  padding: 0 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: linear-gradient(90deg, #3b8cf6, #aee9ff);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* ============================
+   LOGO UECEHIT
+============================ */
+.logo {
+  font-size: 48px;
+  font-weight: 700;
+  color: #ffffff; /* Uece é branco */
+}
+
+.logo .hit-h {
+  color: #e1a919;
+}
+
+.logo .hit-i {
+  color: #c64139;
+}
+
+.logo .hit-t {
+  color: #26276b;
+}
+
+/* ============================
+   NAV LINKS (caso use)
+============================ */
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.header-nav a {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.header-nav a:hover {
+  opacity: 0.8;
+}
+
+/* ============================
+   BOTÃO DE TEMA
+============================ */
+.theme-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: 0.25s;
+}
+
+.theme-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* MODO ESCURO */
+body.dark-mode .header {
+  background: linear-gradient(90deg, #26276b, #242424);
+  border-bottom-color: rgba(255, 255, 255, 0.15);
+}
+
+body.dark-mode .logo {
+  color: white;
+}
+
+/* Cores específicas do HIT no modo escuro */
+body.dark-mode .logo .hit-h {
+  color: #e1a919;
+}
+
+body.dark-mode .logo .hit-i {
+  color: #c64139;
+}
+
+/* T muda para azul (#3B8CF6) */
+body.dark-mode .logo .hit-t {
+  color: #3b8cf6;
+}
+
+body.dark-mode .header-nav a {
+  color: #f0f0f0;
+}
+
+body.dark-mode .theme-btn {
+  background: rgba(255, 255, 255, 0.15);
+}

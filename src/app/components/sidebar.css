@@ -1,0 +1,186 @@
+/* ============================
+   FONTE GLOBAL
+============================ */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@300;400;700&display=swap");
+
+* {
+  font-family: "Noto Sans Gujarati", sans-serif;
+}
+
+/* ============================
+   SIDEBAR (FECHADA / ABERTA)
+============================ */
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 110px;
+  height: calc(100vh - 110px);
+  width: 65px;
+  background: #e3e3e3;
+  border-right: 1px solid #c9c9c9;
+  transition: width 0.25s ease-in-out;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.sidebar.open {
+  width: 260px;
+}
+
+/* ============================
+   BOTÃO MENU
+============================ */
+
+.menu-btn {
+  width: 100%;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  padding-left: 18px;
+  cursor: pointer;
+}
+
+.menu-btn svg {
+  width: 26px;
+  height: 26px;
+  color: #555;
+}
+
+/* ============================
+   PRIMEIRA SEÇÃO
+============================ */
+
+.sidebar-section {
+  padding: 10px 20px;
+  border-bottom: 1px solid #d2d2d2;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* centralizado */
+  gap: 12px;
+  padding: 18px 0;
+  cursor: pointer;
+}
+
+.sidebar-item svg {
+  width: 22px;
+  height: 22px;
+  color: #424040;
+}
+
+.sidebar-item span {
+  font-size: 20px;
+  font-weight: 600;
+  color: #424040;
+}
+
+/* Criar Grupo com espaço extra abaixo */
+.sidebar-section .sidebar-item:first-child {
+  margin-bottom: 50px; /* distância pedida */
+}
+
+/* ============================
+   TÍTULOS
+============================ */
+
+.sidebar-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 20px;     /* AQUI → tamanho atualizado */
+  font-weight: 600;
+  color: #5d5d5d;
+  margin: 18px 0 10px 0;
+}
+
+
+.sidebar-title svg {
+  width: 18px;
+  height: 18px;
+  color: #5d5d5d;
+}
+
+/* para clicar */
+.toggle-title {
+  cursor: pointer;
+}
+
+/* ============================
+   SUBITENS
+============================ */
+
+.sidebar-subitem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  cursor: pointer;
+  padding-left: 4px;
+}
+
+.sidebar-dot-blue {
+  width: 12px;
+  height: 12px;
+  background: #1e1b58;
+  border-radius: 4px;
+}
+
+.sidebar-dot-yellow {
+  width: 12px;
+  height: 12px;
+  background: #e1a919;
+  border-radius: 4px;
+}
+
+.sidebar-subitem span {
+  font-size: 16px;
+  color: #333;
+  line-height: 15px;
+}
+
+/* ============================
+   LOGOUT CENTRALIZADO
+============================ */
+
+.logout-center {
+  margin-top: auto;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 12px 0;
+  transition: background 0.2s ease;
+  border-radius: 8px;
+}
+
+.logout-center:hover {
+  background: #d5d5d5;
+}
+
+/* ============================
+   ANIMAÇÃO (Slide + Fade)
+============================ */
+
+.sidebar-collapse {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-5px);
+  transition:
+    max-height 0.35s ease,
+    opacity 0.25s ease,
+    transform 0.35s ease;
+}
+
+.sidebar-collapse.open {
+  max-height: 500px;
+  opacity: 1;
+  transform: translateY(0);
+}

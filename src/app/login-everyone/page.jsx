@@ -1,19 +1,21 @@
 "use client";
 import React from "react";
 import "./style.css";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
 
-  const handleGoToRegister = (e) => {
-    e.preventDefault();
-    router.push("/register-teacher");
-  };
+  function handleLogin() {
+    router.push("/aluno"); // 👉 redireciona para o dashboard do aluno
+  }
 
   return (
     <div className="login-container">
       <div className="login-box">
+        
+        {/* LADO ESQUERDO */}
         <div className="login-left">
           <h1 className="login-title">
             Uece
@@ -21,6 +23,7 @@ export default function LoginPage() {
             <span className="hit-i">i</span>
             <span className="hit-t">t</span>
           </h1>
+
           <h2 className="login-subtitle">A Uece no seu ritmo!</h2>
 
           <p className="login-welcome">
@@ -38,21 +41,24 @@ export default function LoginPage() {
             <label>
               <input type="checkbox" /> Lembre de mim
             </label>
-            <a href="#" onClick={(e) => e.preventDefault()}>
+
+            {/* 🚀 ROTA CORRETA NO APP ROUTER */}
+            <Link href="/login-everyone/esqueci-senha">
               Esqueceu a senha?
-            </a>
+            </Link>
           </div>
 
-          <button className="login-button">Log In</button>
+          <button className="login-button" onClick={handleLogin}>
+            Log In
+          </button>
 
-          <div className="login-register">
+          <p className="login-register">
             Não tem uma conta?{" "}
-            <a href="/register-teacher" onClick={handleGoToRegister}>
-              Criar conta
-            </a>
-          </div>
+            <Link href="/register-teacher">Crie sua conta</Link>
+          </p>
         </div>
 
+        {/* LADO DIREITO */}
         <div className="login-right">
           <img src="/assets/login-image.png" alt="Ilustração" />
         </div>
