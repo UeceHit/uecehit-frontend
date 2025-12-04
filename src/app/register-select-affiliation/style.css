@@ -4,21 +4,21 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Noto Sans Gujarati', sans-serif;
-  background-color: #C64139;
+  background-color: #F5A89C;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
-.register-container {
+.login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
 }
 
-.register-box {
+.login-box {
   display: flex;
   width: 1300px;
   height: 800px;
@@ -28,7 +28,7 @@ body {
   overflow: hidden;
 }
 
-.register-left {
+.login-left {
   flex: 1;
   color: #ffffff;
   display: flex;
@@ -36,10 +36,14 @@ body {
   padding-left: 80px;
   padding-right: 80px;
   position: relative;
-  background: linear-gradient(180deg, #C64139 0%, #aaa9a9 100%);
 }
 
-.register-title {
+/* Apply requested gradient from top (#EA8C86) to bottom (#FFF2F2) */
+.rsa-left {
+  background: linear-gradient(180deg, #C57C76 0%, #F5D5D2 100%);
+}
+
+.login-title {
   font-size: 48px;
   font-weight: 700;
   margin: 0;
@@ -58,21 +62,26 @@ body {
   color: #26276B;
 }
 
-.register-subtitle {
+.login-subtitle {
   font-size: 24px;
   font-weight: 400;
   margin: 12px 0 0 0;
   color: #ffffff;
 }
 
-.register-welcome {
+.login-welcome {
   font-size: 18px;
   margin-top: 100px;
   margin-bottom: 30px;
   color: #ffffff;
 }
 
-.register-input {
+.login-field {
+  margin-top: 0;
+  margin-bottom: 35px;
+}
+
+.rsa-select, .login-input {
   width: 520px;
   height: 60px;
   border-radius: 8px;
@@ -80,14 +89,23 @@ body {
   padding: 0 15px;
   font-size: 16px;
   color: #888;
-  margin-bottom: 20px;
 }
 
-.register-input:focus {
-  outline: 2px solid #C64139;
+.rsa-select {
+  background: #ffffff;
+  border: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23888' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  padding-right: 40px;
 }
 
-.register-button {
+.rsa-select:focus {
+  outline: 2px solid #EA8C86;
+}
+
+.login-button, .rsa-button {
   width: 520px;
   height: 60px;
   background-color: #C64139;
@@ -98,42 +116,29 @@ body {
   cursor: pointer;
   transition: background 0.3s, transform 0.1s;
   margin-bottom: 20px;
-  margin-top: 10px;
 }
 
-.register-button:hover {
-  background-color: #C64139;
+.login-button:hover, .rsa-button:hover {
+  background-color: #A83531;
 }
 
-.register-button:active {
+.login-button:active, .rsa-button:active {
   transform: scale(0.98);
 }
 
-.register-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.error-text {
-  color: #C64139;
-  font-size: 14px;
-  margin-top: 10px;
-  text-align: center;
-}
-
-.register-login {
+.login-register {
   margin-top: 10px;
   font-size: 14px;
   color: #ffffff;
   text-align: center;
 }
 
-.register-login a {
-  color: #d31010;
+.login-register a {
+  color: #ffffff;
   text-decoration: underline;
 }
 
-.register-right {
+.login-right {
   flex: 1;
   background-color: white;
   display: flex;
@@ -141,7 +146,7 @@ body {
   align-items: center;
 }
 
-.register-right img {
+.login-right img {
   width: 480px;
   height: auto;
   animation: float 4s ease-in-out infinite;
@@ -154,7 +159,7 @@ body {
 }
 
 @media (max-width: 900px) {
-  .register-box { width: 92%; height: auto; flex-direction: column; }
-  .register-left, .register-right { padding: 24px; }
-  .register-input, .register-button { width: 100%; }
+  .login-box { width: 92%; height: auto; flex-direction: column; }
+  .login-left, .login-right { padding: 24px; }
+  .rsa-select, .login-input, .login-button, .rsa-button { width: 100%; }
 }
