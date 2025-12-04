@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;700&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Noto Sans Gujarati', sans-serif;
+  background-color: #F5A89C;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.register-box {
+  display: flex;
+  width: 1300px;
+  height: 800px;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.register-left {
+  flex: 1;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding-left: 80px;
+  padding-right: 80px;
+  position: relative;
+  background: linear-gradient(180deg, #EA8C86 0%, #FFF2F2 100%);
+}
+
+.register-title {
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0;
+  margin-top: 80px;
+}
+
+.hit-h {
+  color: #E1A919;
+}
+
+.hit-i {
+  color: #C64139;
+}
+
+.hit-t {
+  color: #26276B;
+}
+
+.register-subtitle {
+  font-size: 24px;
+  font-weight: 400;
+  margin: 12px 0 0 0;
+  color: #ffffff;
+}
+
+.register-welcome {
+  font-size: 18px;
+  margin-top: 100px;
+  margin-bottom: 30px;
+  color: #ffffff;
+}
+
+.register-input {
+  width: 520px;
+  height: 60px;
+  border-radius: 8px;
+  border: none;
+  padding: 0 15px;
+  font-size: 16px;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+.register-input:focus {
+  outline: 2px solid #EA8C86;
+}
+
+.register-button {
+  width: 520px;
+  height: 60px;
+  background-color: #C64139;
+  color: white;
+  font-size: 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.1s;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.register-button:hover {
+  background-color: #A83531;
+}
+
+.register-button:active {
+  transform: scale(0.98);
+}
+
+.register-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.error-text {
+  color: #ff4444;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.register-login {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.register-login a {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.register-right {
+  flex: 1;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-right img {
+  width: 480px;
+  height: auto;
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@media (max-width: 900px) {
+  .register-box { width: 92%; height: auto; flex-direction: column; }
+  .register-left, .register-right { padding: 24px; }
+  .register-input, .register-button { width: 100%; }
+}
