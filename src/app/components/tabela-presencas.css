@@ -1,0 +1,209 @@
+/* CONTAINER GERAL */
+.tabela-container {
+  width: 100%;
+  padding: 30px 50px;
+}
+
+.titulo-consulta {
+  font-size: 36px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+.academicas {
+  background: linear-gradient(90deg, #1e1b58, #ff9900, #c92020, #2934d0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ÁREA DOS CARDS */
+.tabela-card-area {
+  background: #ededed;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 3px 3px 8px #0002;
+}
+
+.tabela-card {
+  background: #e6e6e6;
+  border-bottom: 2px solid #d3d3d3;
+}
+
+/* CABEÇALHO DOS CARDS */
+.tabela-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #2b2b2b;
+  cursor: pointer;
+}
+
+.tabela-icon {
+  width: 25px;
+  height: 25px;
+  color: #7a7272;
+}
+
+/* ÁREA EXPANDIDA */
+.tabela-expand {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0 22px;
+  transition: all 0.35s ease;
+}
+
+.tabela-expand.open {
+  max-height: 200px;
+  opacity: 1;
+  padding: 22px;
+}
+
+/* TEXTO */
+.tabela-expand p {
+  font-size: 15px;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+/* BOTÃO GERENCIAR */
+.btn-gerenciar {
+  margin-left: auto;
+  display: block;
+  padding: 8px 18px;
+  background: #d4d4d4;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.2s;
+}
+
+.btn-gerenciar:hover {
+  background: #bdbdbd;
+}
+
+/* ===== POPUP OVERLAY ===== */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* ===== POPUP BOX ===== */
+.popup {
+  background: #ffffff;
+  width: 480px;
+  padding: 30px 35px;
+  border-radius: 18px;
+  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.15);
+  position: relative;
+  text-align: center;
+}
+
+/* Título */
+.popup h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #2f2f2f;
+}
+
+/* ===== LINHAS ===== */
+.linha-popup {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin-bottom: 18px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.linha-popup span {
+  font-size: 16px;
+  color: #555;
+}
+
+/* ===== BOTÕES + E - ===== */
+.botoes-popup {
+  display: flex;
+  gap: 10px;
+}
+
+.botoes-popup button {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+/* Botão + (azul) */
+.botoes-popup button:first-child {
+  background: #243189;
+  color: white;
+}
+
+.botoes-popup button:first-child:hover {
+  background: #1a2568;
+}
+
+/* Botão - (vermelho) */
+.botoes-popup button:last-child {
+  background: #c72b2b;
+  color: white;
+}
+
+.botoes-popup button:last-child:hover {
+  background: #962020;
+}
+
+/* ===== BOTÕES DE AÇÃO (SALVAR / FECHAR) ===== */
+.acoes-popup {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 25px;
+  gap: 15px;
+}
+
+.btn-salvar-popup {
+  background: #243189;
+  color: white;
+  padding: 12px 26px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-salvar-popup:hover {
+  background: #1a2568;
+}
+
+.btn-fechar-popup {
+  background: transparent;
+  border: none;
+  color: #444;
+  font-size: 15px;
+  cursor: pointer;
+}
