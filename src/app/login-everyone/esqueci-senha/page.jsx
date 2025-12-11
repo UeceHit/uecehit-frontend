@@ -17,7 +17,7 @@ export default function EsqueciSenhaPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/esqueci-senha", {
+      const response = await fetch("https://api.uecehit.com.br/api/esqueci-senha", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
