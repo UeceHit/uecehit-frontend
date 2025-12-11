@@ -16,7 +16,6 @@ import {
 export default function Sidebar({ turmas = [], grupos = [] }) {
   const [open, setOpen] = useState(false);
 
-  // Toggle para Turmas/Grupos
   const [showTurmas, setShowTurmas] = useState(false);
   const [showGrupos, setShowGrupos] = useState(false);
 
@@ -50,7 +49,6 @@ export default function Sidebar({ turmas = [], grupos = [] }) {
       {/* TURMAS */}
       <div className="sidebar-section">
 
-        {/* Título com seta toggle */}
         <div
           className="sidebar-title toggle-title"
           onClick={() => setShowTurmas(!showTurmas)}
@@ -59,7 +57,6 @@ export default function Sidebar({ turmas = [], grupos = [] }) {
           {open && <span>Turmas</span>}
         </div>
 
-        {/* Conteúdo animado */}
         <div className={`sidebar-collapse ${showTurmas ? "open" : ""}`}>
           {turmas.map((t, i) => (
             <div key={i} className="sidebar-subitem">
@@ -89,6 +86,14 @@ export default function Sidebar({ turmas = [], grupos = [] }) {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* CONSULTAR PRESENÇAS */}
+      <div
+        className="sidebar-footer consult-center"
+        onClick={() => router.push("/consultar-presencas")}
+      >
+        {open && <span>Consultar Presenças</span>}
       </div>
 
       {/* LOGOUT */}

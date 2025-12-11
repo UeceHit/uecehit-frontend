@@ -1,0 +1,34 @@
+/* ----- LAYOUT BASE ----- */
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar fechada (65px) */
+.sidebar-closed .main-content {
+  margin-left: 65px;
+  transition: margin-left 0.25s ease-in-out;
+}
+
+/* Sidebar aberta (260px) */
+.sidebar-open .main-content {
+  margin-left: 260px;
+  transition: margin-left 0.25s ease-in-out;
+}
+
+/* ----- MAIN CONTENT ----- */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  padding-top: 120px; /* espaço para o header fixo */
+}
+
+/* ----- HEADER FIXO ----- */
+.main-content > header,
+.Header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+}
