@@ -14,7 +14,12 @@ export default function RegisterSelectAffiliation() {
       return;
     }
     // Redirecionar baseado na seleção
-    // router.push(`/register-${value}`);
+    const routes = {
+      "aluno": "/register-aluno",
+      "professor": "/register-teacher",
+      "administrador": "/register-administrador"
+    };
+    router.push(routes[value]);
   }
 
   return (

@@ -4,35 +4,14 @@ import { useRouter } from "next/navigation";
 import "./style.css";
 import Link from "next/link";
 
-export default function RegisterTeacher() {
+export default function RegisterAdministrador() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [cursosSelecionados, setCursosSelecionados] = useState([]);
-  const papel = "professor";
+  const papel = "administrador";
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const cursos = [
-    "Ciência da Computação",
-    "Sistemas de Informação",
-    "Engenharia de Software",
-    "Matemática",
-    "Física",
-    "Química",
-  ];
-
-  const handleCursoChange = (e) => {
-    const options = e.target.options;
-    const selected = [];
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].selected) {
-        selected.push(options[i].value);
-      }
-    }
-    setCursosSelecionados(selected);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,7 +26,6 @@ export default function RegisterTeacher() {
           email,
           papel,
           senha,
-          cursos: cursosSelecionados,
         }),
       });
 
@@ -83,7 +61,7 @@ export default function RegisterTeacher() {
           <h2 className="register-subtitle">A Uece no seu ritmo!</h2>
 
           <p className="register-welcome">
-            Crie sua conta e comece sua jornada
+            Crie sua conta de administrador
           </p>
 
           <form onSubmit={handleSubmit}>
@@ -106,24 +84,6 @@ export default function RegisterTeacher() {
               autoComplete="new-password"
             />
 
-            <select
-              className="register-input"
-              multiple
-              value={cursosSelecionados}
-              onChange={handleCursoChange}
-              required
-              style={{ height: "120px" }}
-            >
-              <option value="" disabled>
-                Selecione um ou mais cursos
-              </option>
-              {cursos.map((curso) => (
-                <option key={curso} value={curso}>
-                  {curso}
-                </option>
-              ))}
-            </select>
-
             <button className="register-button" type="submit" disabled={loading}>
               {loading ? "Cadastrando..." : "Criar Conta"}
             </button>
@@ -139,7 +99,7 @@ export default function RegisterTeacher() {
 
         {/* LADO DIREITO */}
         <div className="register-right">
-          <img src="/assets/teacher.svg" alt="Ilustração" />
+          <img src="/assets/admin.svg" alt="Ilustração" />
         </div>
       </div>
     </div>

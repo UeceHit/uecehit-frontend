@@ -54,7 +54,7 @@ export default function LoginPage() {
 
           <p className="login-register">
             Não tem uma conta?{" "}
-            <Link href="/register-teacher">Crie sua conta</Link>
+            <Link href="/register-select-affiliation">Crie sua conta</Link>
           </p>
         </div>
 

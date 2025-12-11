@@ -4,12 +4,12 @@ import { useRouter } from "next/navigation";
 import "./style.css";
 import Link from "next/link";
 
-export default function RegisterTeacher() {
+export default function RegisterAluno() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [cursosSelecionados, setCursosSelecionados] = useState([]);
-  const papel = "professor";
+  const papel = "aluno";
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -83,7 +83,7 @@ export default function RegisterTeacher() {
           <h2 className="register-subtitle">A Uece no seu ritmo!</h2>
 
           <p className="register-welcome">
-            Crie sua conta e comece sua jornada
+            Crie sua conta de aluno e comece sua jornada
           </p>
 
           <form onSubmit={handleSubmit}>
@@ -139,7 +139,7 @@ export default function RegisterTeacher() {
 
         {/* LADO DIREITO */}
         <div className="register-right">
-          <img src="/assets/teacher.svg" alt="Ilustração" />
+          <img src="/assets/student.svg" alt="Ilustração" />
         </div>
       </div>
     </div>
