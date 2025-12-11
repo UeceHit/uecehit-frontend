@@ -4,7 +4,6 @@ import "./style.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-// Define um mapa para associar códigos de status HTTP a mensagens de erro
 const ERROR_MESSAGES = {
   401: "Email ou senha incorretos. Por favor, tente novamente.",
   404: "Conta não cadastrada. Por favor, crie uma conta primeiro.",
@@ -26,48 +25,39 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("https://api.uecehit.com.br/api/login", {
+      const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 
-      // Se a resposta não for bem-sucedida (status 4xx ou 5xx)
       if (!response.ok) {
-        // Tenta obter os dados de erro (que podem conter mais detalhes)
         let errorData;
         try {
           errorData = await response.json();
         } catch (jsonError) {
-          // Ignora erro se a resposta não puder ser convertida para JSON
         }
 
-        // 1. Tratamento de Erros Específicos com o mapa
         let errorMessage = ERROR_MESSAGES[response.status];
 
-        // 2. Se a mensagem não estiver no mapa, usa a mensagem de detalhe da API (se existir) ou a mensagem DEFAULT
         if (!errorMessage) {
-          errorMessage = errorData?.detail?.[0]?.msg // Para erros 422 de validação
-                       || errorData?.detail          // Para outros erros detalhados
+          errorMessage = errorData?.detail?.[0]?.msg
+                       || errorData?.detail
                        || ERROR_MESSAGES.DEFAULT; 
         }
 
         throw new Error(errorMessage);
       }
 
-      // Fluxo de sucesso (response.ok)
       const authToken = await response.json();
       
-      // Observação: Para melhor segurança, considere usar Cookies HTTP-Only
       localStorage.setItem("authToken", authToken);
       router.push("/aluno");
 
     } catch (err) {
-      // Tratamento para erros de rede (ex: 'Failed to fetch')
       if (err.message.includes("Failed to fetch") || err.message.includes("NetworkError")) {
         setError(ERROR_MESSAGES.NETWORK);
       } else {
-        // Erro lançado pelo bloco 'if (!response.ok)' ou outro erro inesperado
         setError(err.message || ERROR_MESSAGES.DEFAULT);
       }
     } finally {
@@ -79,7 +69,6 @@ export default function LoginPage() {
     <div className="login-container">
       <div className="login-box">
         
-        {/* LADO ESQUERDO */}
         <div className="login-left">
           <h1 className="login-title">
             Uece
@@ -132,7 +121,6 @@ export default function LoginPage() {
                 <input type="checkbox" /> Lembre de mim
               </label>
 
-              {/* ROTA CORRETA NO APP ROUTER */}
               <Link href="/login-everyone/esqueci-senha">
                 Esqueceu a senha?
               </Link>
@@ -149,9 +137,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* LADO DIREITO */}
         <div className="login-right">
-          {/* Certifique-se de que a imagem '/assets/login-image.png' existe na pasta public */}
           <img src="/assets/login-image.png" alt="Ilustração de login" />
         </div>
       </div>

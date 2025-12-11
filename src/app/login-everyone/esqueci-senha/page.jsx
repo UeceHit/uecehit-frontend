@@ -42,11 +42,9 @@ export default function EsqueciSenhaPage() {
     <div className="page-wrapper">
       <div className="outer-card">
 
-        {/* LADO ESQUERDO */}
         <div className="left-panel">
           <div className="left-inner">
 
-            {/* Título */}
             <h1 className="brand-title">
               Uece<span className="hit-h">H</span>
               <span className="hit-i">i</span>
@@ -55,7 +53,6 @@ export default function EsqueciSenhaPage() {
 
             <p className="brand-sub">A Uece no seu ritmo!</p>
 
-            {/* espaço de 70px antes do título principal */}
             <h2 className="forgot-main">Esqueceu a senha?</h2>
 
             <p className="forgot-sub">
@@ -77,14 +74,12 @@ export default function EsqueciSenhaPage() {
                 />
               </div>
 
-              {/* botão com 80px de distância */}
               <button type="submit" className="reset-button" disabled={loading}>
                 {loading ? "Enviando..." : "Resetar Senha"}
               </button>
             </form>
 
             <div className="back-wrap">
-              {/* ✔ rota corrigida — App Router usa /login-everyone */}
               <Link href="/login-everyone" className="back-link">
                 ‹ Voltar à tela de Login
               </Link>
@@ -92,7 +87,6 @@ export default function EsqueciSenhaPage() {
           </div>
         </div>
 
-        {/* LADO DIREITO – reservado para imagem futura */}
         <div className="right-panel placeholder-panel"></div>
 
       </div>
