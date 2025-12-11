@@ -6,33 +6,23 @@ import Link from "next/link";
 
 export default function RegisterTeacher() {
   const router = useRouter();
+  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [cursosSelecionados, setCursosSelecionados] = useState([]);
-  const papel = "professor";
+  const [cursoSelecionado, setCursoSelecionado] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const cursos = [
-    "Ciência da Computação",
-    "Sistemas de Informação",
-    "Engenharia de Software",
-    "Matemática",
-    "Física",
-    "Química",
+    "Ciência da Computação - Bacharelado - Diurno",
+    "Ciência da Computação - Bacharelado - Noturno",
+    "Sistemas de Informação - Bacharelado - Noturno",
+    "Engenharia de Software - Bacharelado - Diurno",
+    "Matemática - Licenciatura - Noturno",
+    "Física - Licenciatura - Noturno",
+    "Química - Licenciatura - Noturno",
   ];
-
-  const handleCursoChange = (e) => {
-    const options = e.target.options;
-    const selected = [];
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].selected) {
-        selected.push(options[i].value);
-      }
-    }
-    setCursosSelecionados(selected);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,28 +30,33 @@ export default function RegisterTeacher() {
     setError(null);
 
     try {
-      const res = await fetch("/api/users/", {
+      const res = await fetch("https://api.uecehit.com.br/api/users/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          nome,
           email,
-          papel,
+          papel: "professor",
+          curso: cursoSelecionado,
           senha,
-          cursos: cursosSelecionados,
         }),
       });
 
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        setError(data?.detail || data?.message || "Erro no registro");
+        if (res.status === 422) {
+          setError("Dados inválidos. Verifique todos os campos.");
+        } else {
+          setError(data?.detail || "Erro ao criar conta. Tente novamente.");
+        }
         setLoading(false);
         return;
       }
 
-      router.push("/aluno");
+      router.push("/login-everyone");
     } catch (err) {
-      setError("Erro de rede");
+      setError("Erro de conexão. Verifique sua internet.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -71,7 +66,6 @@ export default function RegisterTeacher() {
   return (
     <div className="register-container">
       <div className="register-box">
-        {/* LADO ESQUERDO */}
         <div className="register-left">
           <h1 className="register-title">
             Uece
@@ -87,6 +81,28 @@ export default function RegisterTeacher() {
           </p>
 
           <form onSubmit={handleSubmit}>
+            {error && (
+              <div style={{ 
+                color: "#721c24", 
+                backgroundColor: "#f8d7da",
+                border: "1px solid #f5c6cb",
+                borderRadius: "5px",
+                padding: "12px",
+                marginBottom: "15px",
+                fontSize: "14px"
+              }}>
+                {error}
+              </div>
+            )}
+
+            <input
+              type="text"
+              className="register-input"
+              placeholder="Nome completo"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              required
+            />
             <input
               type="email"
               className="register-input"
@@ -108,15 +124,11 @@ export default function RegisterTeacher() {
 
             <select
               className="register-input"
-              multiple
-              value={cursosSelecionados}
-              onChange={handleCursoChange}
+              value={cursoSelecionado}
+              onChange={(e) => setCursoSelecionado(e.target.value)}
               required
-              style={{ height: "120px" }}
             >
-              <option value="" disabled>
-                Selecione um ou mais cursos
-              </option>
+              <option value="">Selecione seu curso</option>
               {cursos.map((curso) => (
                 <option key={curso} value={curso}>
                   {curso}
@@ -127,8 +139,6 @@ export default function RegisterTeacher() {
             <button className="register-button" type="submit" disabled={loading}>
               {loading ? "Cadastrando..." : "Criar Conta"}
             </button>
-
-            {error && <p className="error-text">{String(error)}</p>}
           </form>
 
           <p className="register-login">
@@ -137,7 +147,6 @@ export default function RegisterTeacher() {
           </p>
         </div>
 
-        {/* LADO DIREITO */}
         <div className="register-right">
           <img src="/assets/teacher.svg" alt="Ilustração" />
         </div>
