@@ -236,3 +236,68 @@
   justify-content: space-between;
   align-items: flex-start;
 }
+
+/* ============================
+   SIDEBAR — MODO ESCURO
+============================ */
+
+body.dark-mode .sidebar {
+  background: #373636;
+  border-right: 1px solid #cbcbcb;
+}
+
+/* Linhas divisórias */
+body.dark-mode .sidebar-section {
+  border-bottom: 1px solid #cbcbcb;
+}
+
+/* BOTÃO MENU */
+body.dark-mode .menu-btn svg {
+  color: #ffffff;
+}
+
+/* ITENS PRINCIPAIS */
+body.dark-mode .sidebar-item svg {
+  color: #ffffff;
+}
+
+body.dark-mode .sidebar-item span {
+  color: #ffffff;
+}
+
+/* TÍTULOS */
+body.dark-mode .sidebar-title {
+  color: #ffffff;
+}
+
+body.dark-mode .sidebar-title svg {
+  color: #ffffff;
+}
+
+/* SUBITENS */
+body.dark-mode .sidebar-subitem span {
+  color: #ffffff;
+}
+
+/* CONSULTAR PRESENÇAS */
+body.dark-mode .consult-center span {
+  color: #ffffff;
+}
+
+body.dark-mode .consult-center:hover {
+  background: #4a4a4a;
+}
+
+/* LOGOUT */
+body.dark-mode .logout-center {
+  color: #ffffff;
+}
+
+body.dark-mode .logout-center:hover {
+  background: #4a4a4a;
+}
+
+/* ÍCONES GERAIS */
+body.dark-mode svg {
+  color: #ffffff;
+}

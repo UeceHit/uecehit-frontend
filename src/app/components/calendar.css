@@ -116,3 +116,112 @@
   .create-btn { width:130px; height:48px; font-size:16px; }
   .popup-card { width:92%; padding:18px; }
 }
+
+/* ========================= */
+/* 🌙 MODO ESCURO — CALENDÁRIO */
+/* ========================= */
+
+body.dark-mode .calendar-wrapper {
+  background: #1e1e1e;
+}
+
+/* header */
+body.dark-mode .calendar-header {
+  color: white;
+}
+
+body.dark-mode .arrow-btn svg {
+  color: white;
+}
+
+body.dark-mode .arrow-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* switch */
+body.dark-mode .calendar-mode-selector .mode-btn {
+  background: #373636;
+  color: white;
+}
+
+body.dark-mode .calendar-mode-selector .mode-btn.selected {
+  background: #2a2a2a;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+body.dark-mode .selected-indicator {
+  background: #3B8CF6;
+}
+
+/* 🔵 BOTÃO CRIAR */
+body.dark-mode .create-btn {
+  background: #3B8CF6;
+  color: white;
+}
+
+/* weekdays */
+body.dark-mode .calendar-weekdays {
+  color: white;
+}
+
+/* grid + cells */
+body.dark-mode .calendar-cell {
+  background: #2a2a2a;
+  border-top: 1px solid #CBCBCB;
+  border-left: 1px solid #CBCBCB;
+}
+
+body.dark-mode .calendar-cell .day-number {
+  color: #f0f0f0;
+}
+
+/* events */
+body.dark-mode .event-pill {
+  background: #373636;
+  color: white;
+}
+
+body.dark-mode .event-text {
+  color: white;
+}
+
+/* week column */
+body.dark-mode .week-column {
+  border-left: 1px solid #CBCBCB;
+}
+
+/* popup */
+body.dark-mode .popup-overlay {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode .popup-card {
+  background: #373636;
+}
+
+body.dark-mode .popup-title {
+  color: white;
+}
+
+body.dark-mode .popup-input {
+  background: #2a2a2a;
+  color: white;
+}
+
+body.dark-mode .popup-input::placeholder {
+  color: #bdbdbd;
+}
+
+body.dark-mode .btn-save {
+  background: #3B8CF6;
+  color: white;
+}
+
+body.dark-mode .btn-cancel {
+  background: #555;
+  color: white;
+}
+
+body.dark-mode .popup-close {
+  color: white;
+}
