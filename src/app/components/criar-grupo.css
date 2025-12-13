@@ -1,0 +1,116 @@
+/* ===========================
+   OVERLAY ESCURO
+=========================== */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(2px);
+  z-index: 9999;
+}
+
+/* ===========================
+   CONTAINER DO POPUP
+=========================== */
+.popup-container {
+  background: #ece9e9;
+  width: 620px;
+  padding: 40px 45px;
+  border-radius: 14px;
+  border: 3px solid #4a92ff;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+/* Botão de fechar */
+.popup-close {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #444;
+  transition: 0.2s ease;
+}
+
+.popup-close:hover {
+  color: #000;
+}
+
+/* Título */
+.popup-title {
+  width: 100%;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 35px;
+  color: #3d3d3d;
+}
+
+/* ===========================
+   INPUTS
+=========================== */
+.popup-input {
+  width: 100%;
+  background: #ffffff;
+  padding: 16px 18px;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  border: none;
+  margin-bottom: 25px;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Linha com input + botão "Adicionar" */
+.popup-row {
+  width: 100%;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 35px;
+}
+
+/* Botão "Adicionar" */
+.popup-add-btn {
+  background: #1c1a4d;
+  color: white;
+  border: none;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  transition: 0.2s ease;
+}
+
+.popup-add-btn:hover {
+  background: #0d0b2c;
+}
+
+/* Botão principal "Criar" */
+.popup-main-btn {
+  background: #1c1a4d;
+  color: white;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 10px;
+  font-size: 17px;
+  cursor: pointer;
+  font-weight: 600;
+  display: block;
+  margin: 0 auto;
+  transition: 0.2s ease;
+}
+
+.popup-main-btn:hover {
+  background: #0d0b2c;
+}
