@@ -13,11 +13,21 @@ import {
   LogOut
 } from "lucide-react";
 
-export default function Sidebar({ turmas = [], grupos = [] }) {
+import CriarGrupo from "./CriarGrupo";
+import PopupGrupo from "./PopupGrupo";
+
+export default function Sidebar({ turmas = [], gruposInicial = [] }) {
   const [open, setOpen] = useState(false);
 
   const [showTurmas, setShowTurmas] = useState(false);
   const [showGrupos, setShowGrupos] = useState(false);
+
+  const [showCriarGrupo, setShowCriarGrupo] = useState(false);
+
+  // agora sempre são objetos { nome, membros }
+  const [grupos, setGrupos] = useState(gruposInicial);
+
+  const [grupoSelecionado, setGrupoSelecionado] = useState(null);
 
   const router = useRouter();
 
@@ -25,82 +35,134 @@ export default function Sidebar({ turmas = [], grupos = [] }) {
     router.push("/login-everyone");
   };
 
+  // ✔ RECEBE OBJETO CORRETAMENTE
+  const handleCreateGrupo = (grupoObj) => {
+    if (!grupoObj || typeof grupoObj !== "object") {
+      alert("Erro interno ao criar o grupo.");
+      return;
+    }
+
+    if (!grupoObj.nome || grupoObj.nome.trim() === "") {
+      alert("Digite um nome válido para o grupo.");
+      return;
+    }
+
+    const novoGrupo = {
+      nome: grupoObj.nome.trim(),
+      membros: grupoObj.membros || []
+    };
+
+    setGrupos([...grupos, novoGrupo]);
+    setShowCriarGrupo(false);
+  };
+
+  // ✔ EXCLUI O GRUPO SELECIONADO
+  const handleExcluirGrupo = () => {
+    if (!grupoSelecionado) return;
+
+    setGrupos(grupos.filter((g) => g.nome !== grupoSelecionado.nome));
+    setGrupoSelecionado(null);
+  };
+
   return (
-    <aside className={`sidebar ${open ? "open" : ""}`}>
-
-      {/* Botão Menu */}
-      <div className="menu-btn" onClick={() => setOpen(!open)}>
-        <Menu />
-      </div>
-
-      {/* PRIMEIRA SEÇÃO */}
-      <div className="sidebar-section">
-        <div className="sidebar-item" style={{ marginBottom: "50px" }}>
-          <Users />
-          {open && <span>Criar Grupo</span>}
+    <>
+      <aside className={`sidebar ${open ? "open" : ""}`}>
+        <div className="menu-btn" onClick={() => setOpen(!open)}>
+          <Menu />
         </div>
 
-        <div className="sidebar-item">
-          <Bell />
-          {open && <span>Notificação</span>}
+        {/* CREATE GROUP */}
+        <div className="sidebar-section">
+          <div
+            className="sidebar-item"
+            style={{ marginBottom: "50px" }}
+            onClick={() => setShowCriarGrupo(true)}
+          >
+            <Users />
+            {open && <span>Criar Grupo</span>}
+          </div>
+
+          <div className="sidebar-item">
+            <Bell />
+            {open && <span>Notificação</span>}
+          </div>
         </div>
-      </div>
 
-      {/* TURMAS */}
-      <div className="sidebar-section">
+        {/* TURMAS */}
+        <div className="sidebar-section">
+          <div
+            className="sidebar-title toggle-title"
+            onClick={() => setShowTurmas(!showTurmas)}
+          >
+            {showTurmas ? <ChevronDown /> : <ChevronRight />}
+            {open && <span>Turmas</span>}
+          </div>
 
+          <div className={`sidebar-collapse ${showTurmas ? "open" : ""}`}>
+            {turmas.map((t, i) => (
+              <div key={i} className="sidebar-subitem">
+                <div className="sidebar-dot-blue"></div>
+                {open && <span>{t}</span>}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* GRUPOS */}
+        <div className="sidebar-section">
+          <div
+            className="sidebar-title toggle-title"
+            onClick={() => setShowGrupos(!showGrupos)}
+          >
+            {showGrupos ? <ChevronDown /> : <ChevronRight />}
+            {open && <span>Grupos</span>}
+          </div>
+
+          <div className={`sidebar-collapse ${showGrupos ? "open" : ""}`}>
+            {grupos.map((g, i) => (
+              <div
+                key={i}
+                className="sidebar-subitem"
+                onClick={() => setGrupoSelecionado(g)}
+              >
+                <div className="sidebar-dot-yellow"></div>
+                {open && <span>{g.nome}</span>}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CONSULTAR PRESENÇAS */}
         <div
-          className="sidebar-title toggle-title"
-          onClick={() => setShowTurmas(!showTurmas)}
+          className="sidebar-footer consult-center"
+          onClick={() => router.push("/consultar-presencas")}
         >
-          {showTurmas ? <ChevronDown /> : <ChevronRight />}
-          {open && <span>Turmas</span>}
+          {open && <span>Consultar Presenças</span>}
         </div>
 
-        <div className={`sidebar-collapse ${showTurmas ? "open" : ""}`}>
-          {turmas.map((t, i) => (
-            <div key={i} className="sidebar-subitem">
-              <div className="sidebar-dot-blue"></div>
-              {open && <span>{t}</span>}
-            </div>
-          ))}
+        {/* LOGOUT */}
+        <div className="sidebar-footer logout-center" onClick={handleLogout}>
+          <LogOut />
+          {open && <span>Logout</span>}
         </div>
-      </div>
+      </aside>
 
-      {/* GRUPOS */}
-      <div className="sidebar-section">
+      {/* POPUP CRIAR GRUPO */}
+      {showCriarGrupo && (
+        <CriarGrupo
+          onClose={() => setShowCriarGrupo(false)}
+          onCreate={handleCreateGrupo}
+        />
+      )}
 
-        <div
-          className="sidebar-title toggle-title"
-          onClick={() => setShowGrupos(!showGrupos)}
-        >
-          {showGrupos ? <ChevronDown /> : <ChevronRight />}
-          {open && <span>Grupos</span>}
-        </div>
-
-        <div className={`sidebar-collapse ${showGrupos ? "open" : ""}`}>
-          {grupos.map((g, i) => (
-            <div key={i} className="sidebar-subitem">
-              <div className="sidebar-dot-yellow"></div>
-              {open && <span>{g}</span>}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* CONSULTAR PRESENÇAS */}
-      <div
-        className="sidebar-footer consult-center"
-        onClick={() => router.push("/consultar-presencas")}
-      >
-        {open && <span>Consultar Presenças</span>}
-      </div>
-
-      {/* LOGOUT */}
-      <div className="sidebar-footer logout-center" onClick={handleLogout}>
-        <LogOut />
-        {open && <span>Logout</span>}
-      </div>
-    </aside>
+      {/* POPUP DO GRUPO */}
+      {grupoSelecionado && (
+        <PopupGrupo
+          grupo={grupoSelecionado}
+          onClose={() => setGrupoSelecionado(null)}
+          onExcluir={handleExcluirGrupo}
+        />
+      )}
+    </>
   );
 }
