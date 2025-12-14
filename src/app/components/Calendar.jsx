@@ -17,6 +17,51 @@ export default function Calendar({ view = "mês", setView }) {
   const [showPopup, setShowPopup] = useState(false);
   const [events, setEvents] = useState([]); // eventos originais salvos
   const [mode, setMode] = useState(view); // controle interno de view
+  const [loading, setLoading] = useState(false);
+
+  // Carregar eventos ao montar o componente
+  useEffect(() => {
+    const loadEvents = async () => {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem('access_token');
+        
+        if (!token) {
+          return;
+        }
+        
+        const response = await fetch('https://api.uecehit.com.br/api/events/', {
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          // Converter formato da API para formato interno
+          const formattedEvents = data.map(evt => ({
+            id: evt.id,
+            nome: evt.titulo,
+            data: evt.data_inicio.split('T')[0], // extrair YYYY-MM-DD
+            hora: evt.data_inicio.split('T')[1]?.substring(0, 5) || '', // extrair HH:MM
+            local: evt.local,
+            categoria: evt.categoria,
+            grupo: evt.grupo_id,
+            periodicidade: evt.tipo_evento === 'evento_unico' ? 'Evento Único' : evt.recorrencia || '',
+            descricao: evt.descricao
+          }));
+          setEvents(formattedEvents);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar eventos:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadEvents();
+  }, []);
 
   useEffect(() => {
   setMode(view);
@@ -162,34 +207,118 @@ export default function Calendar({ view = "mês", setView }) {
   // --- popup form component (inline) ---
   function PopupCriarEvento() {
     const [nome, setNome] = useState("");
+    const [descricao, setDescricao] = useState("");
     const [dataInput, setDataInput] = useState(() => {
       const d = new Date();
       return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
     });
     const [hora, setHora] = useState("");
+    const [horaFim, setHoraFim] = useState("");
     const [local, setLocal] = useState("");
     const [categoria, setCategoria] = useState("");
     const [grupo, setGrupo] = useState("");
+    const [turma, setTurma] = useState("");
     const [periodicidade, setPeriodicidade] = useState("Evento Único");
+    const [salvando, setSalvando] = useState(false);
 
-    function salvar() {
-      if (!nome || !dataInput) { alert("Preencha nome e data"); return; }
-      setEvents(prev => [...prev, {
-        nome,
-        data: dataInput, // 'YYYY-MM-DD'
-        hora, // 'HH:MM'
-        local,
-        categoria,
-        grupo,
-        periodicidade
-      }]);
-      setShowPopup(false);
+    async function salvar() {
+      if (!nome || !dataInput) { 
+        return; 
+      }
+
+      setSalvando(true);
+      
+      try {
+        const token = localStorage.getItem('access_token');
+        
+        if (!token) {
+          console.error('Token não encontrado');
+          setSalvando(false);
+          return;
+        }
+        
+        // Construir data_inicio e data_fim no formato ISO
+        const horaInicio = hora || "00:00";
+        const horaFinal = horaFim || (hora ? `${String(Number(hora.split(':')[0]) + 1).padStart(2, '0')}:${hora.split(':')[1]}` : "23:59");
+        const data_inicio = `${dataInput}T${horaInicio}:00`;
+        const data_fim = `${dataInput}T${horaFinal}:00`;
+
+        // Mapear periodicidade para tipo_evento e recorrencia
+        let tipo_evento = "evento_unico";
+        let recorrencia = null;
+        
+        if (periodicidade.toLowerCase() === "diário" || periodicidade.toLowerCase() === "diario") {
+          tipo_evento = "evento_recorrente";
+          recorrencia = "diaria";
+        } else if (periodicidade.toLowerCase() === "semanal") {
+          tipo_evento = "evento_recorrente";
+          recorrencia = "semanal";
+        } else if (periodicidade.toLowerCase() === "mensal") {
+          tipo_evento = "evento_recorrente";
+          recorrencia = "mensal";
+        }
+
+        const body = {
+          titulo: nome,
+          descricao: descricao || "",
+          data_inicio,
+          data_fim,
+          categoria: categoria.toLowerCase() || "pessoal",
+          local: local || "",
+          tipo_evento,
+          recorrencia,
+          grupo_id: grupo ? Number(grupo) : null,
+          turma_id: turma ? Number(turma) : null
+        };
+
+        console.log('Enviando evento para API:', body);
+
+        const response = await fetch('https://api.uecehit.com.br/api/events/', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+
+        console.log('Status resposta:', response.status);
+
+        if (response.ok) {
+          const novoEvento = await response.json();
+          console.log('Evento criado com sucesso:', novoEvento);
+          
+          // Adicionar ao state local no formato interno
+          setEvents(prev => [...prev, {
+            id: novoEvento.id,
+            nome: novoEvento.titulo,
+            data: dataInput,
+            hora: horaInicio,
+            local: novoEvento.local,
+            categoria: novoEvento.categoria,
+            grupo: novoEvento.grupo_id,
+            periodicidade,
+            descricao: novoEvento.descricao
+          }]);
+          
+          setShowPopup(false);
+        } else {
+          const errorText = await response.text();
+          console.error('Erro ao criar evento - Status:', response.status);
+          console.error('Resposta do servidor:', errorText);
+          try {
+            const errorJson = JSON.parse(errorText);
+            console.error('Detalhes do erro:', errorJson);
+          } catch (e) {
+            console.error('Erro não é JSON:', errorText);
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao salvar evento:', error);
+      } finally {
+        setSalvando(false);
+      }
     }
-
-    const inputStyle = {
-      width: "100%", padding: "12px", border: "none", borderRadius: 8,
-      boxShadow: "0 2px 8px rgba(0,0,0,0.10)", fontFamily: "Noto Sans Gujarati", color: "#424040"
-    };
 
     return (
       <div className="popup-overlay">
@@ -199,9 +328,18 @@ export default function Calendar({ view = "mês", setView }) {
 
           <input className="popup-input" placeholder="Nome do Evento:" value={nome} onChange={e=>setNome(e.target.value)} />
 
+          <textarea 
+            className="popup-input" 
+            placeholder="Descrição (opcional):" 
+            value={descricao} 
+            onChange={e=>setDescricao(e.target.value)}
+            style={{minHeight: 60, resize: 'vertical'}}
+          />
+
           <div style={{display:"flex", gap:12, marginTop:12}}>
             <input type="date" className="popup-input" value={dataInput} onChange={e=>setDataInput(e.target.value)} />
-            <input type="time" className="popup-input" value={hora} onChange={e=>setHora(e.target.value)} style={{width:150}} />
+            <input type="time" className="popup-input" placeholder="Início" value={hora} onChange={e=>setHora(e.target.value)} style={{width:150}} />
+            <input type="time" className="popup-input" placeholder="Fim" value={horaFim} onChange={e=>setHoraFim(e.target.value)} style={{width:150}} />
           </div>
 
           <input className="popup-input" placeholder="Local:" value={local} onChange={e=>setLocal(e.target.value)} />
@@ -209,12 +347,25 @@ export default function Calendar({ view = "mês", setView }) {
           <div style={{display:"flex", gap:12}}>
             <select className="popup-input" value={categoria} onChange={e=>setCategoria(e.target.value)}>
               <option value="">Selecione uma categoria</option>
-              <option>Pessoal</option><option>Reunião</option><option>Provas</option><option>Atividades Acadêmicas</option>
+              <option value="pessoal">Pessoal</option>
+              <option value="reuniao">Reunião</option>
+              <option value="provas">Provas</option>
+              <option value="atividades_academicas">Atividades Acadêmicas</option>
             </select>
-            <select className="popup-input" value={grupo} onChange={e=>setGrupo(e.target.value)}>
-              <option value="">Selecione um grupo/turma</option>
-              <option>Geral</option><option>Turma de Eng. de Software</option><option>Turma de APS</option>
-            </select>
+            <input 
+              className="popup-input" 
+              type="number" 
+              placeholder="ID do Grupo (opcional)" 
+              value={grupo} 
+              onChange={e=>setGrupo(e.target.value)} 
+            />
+            <input 
+              className="popup-input" 
+              type="number" 
+              placeholder="ID da Turma (opcional)" 
+              value={turma} 
+              onChange={e=>setTurma(e.target.value)} 
+            />
           </div>
 
           <select className="popup-input" value={periodicidade} onChange={e=>setPeriodicidade(e.target.value)}>
@@ -225,8 +376,10 @@ export default function Calendar({ view = "mês", setView }) {
           </select>
 
           <div style={{display:"flex", justifyContent:"flex-end", marginTop:14}}>
-            <button className="btn-cancel" onClick={()=>setShowPopup(false)}>Cancelar</button>
-            <button className="btn-save" onClick={salvar}>Salvar</button>
+            <button className="btn-cancel" onClick={()=>setShowPopup(false)} disabled={salvando}>Cancelar</button>
+            <button className="btn-save" onClick={salvar} disabled={salvando}>
+              {salvando ? 'Salvando...' : 'Salvar'}
+            </button>
           </div>
         </div>
       </div>
