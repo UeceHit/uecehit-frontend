@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import "./sidebar.css";
 
@@ -24,18 +24,55 @@ export default function Sidebar({ turmas = [], gruposInicial = [] }) {
 
   const [showCriarGrupo, setShowCriarGrupo] = useState(false);
 
-  // agora sempre são objetos { nome, membros }
   const [grupos, setGrupos] = useState(gruposInicial);
+  const [loadingGrupos, setLoadingGrupos] = useState(false);
 
   const [grupoSelecionado, setGrupoSelecionado] = useState(null);
 
   const router = useRouter();
 
+  useEffect(() => {
+    const loadGrupos = async () => {
+      try {
+        setLoadingGrupos(true);
+        
+        const token = localStorage.getItem('access_token');
+        
+        if (!token) {
+          setLoadingGrupos(false);
+          return;
+        }
+        
+        const response = await fetch('https://api.uecehit.com.br/api/grupos/', {
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setGrupos(data.map(g => ({
+            id: g.id,
+            nome: g.nome,
+            descricao: g.descricao || '',
+            membros: [] // membros podem ser carregados separadamente se necessário
+          })));
+        }
+      } catch (error) {
+        console.error('Erro ao carregar grupos:', error);
+      } finally {
+        setLoadingGrupos(false);
+      }
+    };
+
+    loadGrupos();
+  }, []);
+
   const handleLogout = () => {
     router.push("/login-everyone");
   };
 
-  // ✔ RECEBE OBJETO CORRETAMENTE
   const handleCreateGrupo = (grupoObj) => {
     if (!grupoObj || typeof grupoObj !== "object") {
       alert("Erro interno ao criar o grupo.");
@@ -48,7 +85,9 @@ export default function Sidebar({ turmas = [], gruposInicial = [] }) {
     }
 
     const novoGrupo = {
+      id: grupoObj.id,
       nome: grupoObj.nome.trim(),
+      descricao: grupoObj.descricao || '',
       membros: grupoObj.membros || []
     };
 
@@ -56,7 +95,6 @@ export default function Sidebar({ turmas = [], gruposInicial = [] }) {
     setShowCriarGrupo(false);
   };
 
-  // ✔ EXCLUI O GRUPO SELECIONADO
   const handleExcluirGrupo = () => {
     if (!grupoSelecionado) return;
 

@@ -35,23 +35,25 @@ export default function LoginPage() {
         let errorData;
         try {
           errorData = await response.json();
-        } catch (jsonError) {
-        }
+        } catch {}
 
         let errorMessage = ERROR_MESSAGES[response.status];
 
         if (!errorMessage) {
-          errorMessage = errorData?.detail?.[0]?.msg
-                       || errorData?.detail
-                       || ERROR_MESSAGES.DEFAULT; 
+          errorMessage =
+            errorData?.detail?.[0]?.msg ||
+            errorData?.detail ||
+            ERROR_MESSAGES.DEFAULT;
         }
 
         throw new Error(errorMessage);
       }
 
-      const authToken = await response.json();
-      
-      localStorage.setItem("authToken", authToken);
+      const authData = await response.json();
+
+      localStorage.setItem("access_token", authData.access_token);
+      localStorage.setItem("token_type", authData.token_type);
+
       router.push("/aluno");
 
     } catch (err) {
