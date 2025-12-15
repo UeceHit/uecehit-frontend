@@ -64,9 +64,8 @@
 .sidebar-item {
   display: flex;
   align-items: center;
-  justify-content: center; /* centralizado */
   gap: 12px;
-  padding: 18px 0;
+  margin: 18px 0 10px 0;
   cursor: pointer;
 }
 
@@ -77,14 +76,14 @@
 }
 
 .sidebar-item span {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   color: #424040;
 }
 
 /* Criar Grupo com espaço extra abaixo */
 .sidebar-section .sidebar-item:first-child {
-  margin-bottom: 50px; /* distância pedida */
+  margin-bottom: 30px !important; /* reduzido de 50px para 10px */
 }
 
 /* ============================
@@ -153,7 +152,7 @@
   align-items: center;
   justify-content: center; /* centralizado */
   cursor: pointer;
-  padding: 12px 0;
+  padding: 20px 0;
   transition: background 0.2s ease;
   border-radius: 8px;
   margin-bottom: 30px; 

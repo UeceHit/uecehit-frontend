@@ -125,13 +125,45 @@
 /* 🌙 MODO ESCURO — CALENDÁRIO */
 /* ========================= */
 
-body.dark-mode .calendar-wrapper {
-  background: #1e1e1e;
+body.dark-mode {
+  background-color: #1a1a1a !important;
 }
 
-/* header */
+body.dark-mode .calendar-container {
+  background-color: #1a1a1a;
+}
+
+body.dark-mode .calendar-box {
+  background-color: #2a2a2a;
+  color: #ffffff;
+}
+
 body.dark-mode .calendar-header {
-  color: white;
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+body.dark-mode .calendar-grid {
+  background-color: #1a1a1a;
+}
+
+body.dark-mode .calendar-day {
+  background-color: #2a2a2a;
+  border-color: #3a3a3a;
+  color: #ffffff;
+}
+
+body.dark-mode .calendar-day.empty {
+  background-color: #1a1a1a;
+}
+
+body.dark-mode .day-number {
+  color: #ffffff;
+}
+
+body.dark-mode .week-header {
+  background-color: #2a2a2a;
+  color: #ffffff;
 }
 
 body.dark-mode .arrow-btn svg {
