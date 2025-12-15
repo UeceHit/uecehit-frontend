@@ -12,11 +12,15 @@
 /* 📌 ESTILOS DO CALENDÁRIO */
 /* ========================= */
 
+
+
 .calendar-wrapper {
   width: 100%;
-  padding: 20px 40px;
+  max-width: calc(100vw - 80px);
+  padding: 20px 20px;
   box-sizing: border-box;
   font-family: "Noto Sans Gujarati", sans-serif;
+  margin: 0 auto;
 }
 
 /* header */

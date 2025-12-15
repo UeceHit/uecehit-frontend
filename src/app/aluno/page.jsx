@@ -33,13 +33,17 @@ export default function AlunoDashboard() {
           grupos={["Banca TCC", "PET"]}
         />
 
+
         {/* CONTEÚDO PRINCIPAL */}
         <div className="main-content">
           {/* CALENDÁRIO À ESQUERDA */}
           <div
             style={{
-              width: "1220px",
-              height: "710px",
+              flex: 1,
+              minWidth: 0,
+              maxWidth: "calc(100vw - 400px)",
+              height: "auto",
+              minHeight: "710px",
             }}
           >
             <Calendar view={view} setView={setView} />
@@ -51,6 +55,7 @@ export default function AlunoDashboard() {
               width: "250px",
               textAlign: "center",
               marginLeft: "20px",
+              flexShrink: 0,
             }}
           >
             <CalendarViewSwitcher
