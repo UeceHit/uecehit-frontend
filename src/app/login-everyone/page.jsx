@@ -25,17 +25,24 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
+      console.log('Tentando fazer login com:', username);
+      
       const response = await fetch("https://api.uecehit.com.br/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 
+      console.log('Status da resposta:', response.status);
+
       if (!response.ok) {
         let errorData;
         try {
           errorData = await response.json();
-        } catch {}
+          console.log('Erro da API:', errorData);
+        } catch (jsonError) {
+          console.log('Não foi possível parsear erro como JSON');
+        }
 
         let errorMessage = ERROR_MESSAGES[response.status];
 
@@ -49,14 +56,34 @@ export default function LoginPage() {
         throw new Error(errorMessage);
       }
 
-      const authData = await response.json();
-
-      localStorage.setItem("access_token", authData.access_token);
-      localStorage.setItem("token_type", authData.token_type);
-
+      const data = await response.json();
+      
+      console.log('Resposta completa da API:', data);
+      
+      // Extrair o token do objeto de resposta
+      const token = data.access_token || data.token || data;
+      
+      console.log('Token extraído:', token);
+      console.log('Tipo do token:', typeof token);
+      
+      if (!token || typeof token !== 'string') {
+        console.error('Token inválido recebido:', token);
+        throw new Error('Token inválido recebido do servidor');
+      }
+      
+      // Salvar com a chave correta que o Calendar.jsx está buscando
+      localStorage.setItem("access_token", token);
+      
+      console.log('Token salvo no localStorage');
+      console.log('Verificando se foi salvo:', localStorage.getItem("access_token"));
+      
+      // Também manter a chave antiga por compatibilidade (opcional)
+      localStorage.setItem("authToken", token);
+      
       router.push("/aluno");
 
     } catch (err) {
+      console.error('Erro no login:', err);
       if (err.message.includes("Failed to fetch") || err.message.includes("NetworkError")) {
         setError(ERROR_MESSAGES.NETWORK);
       } else {

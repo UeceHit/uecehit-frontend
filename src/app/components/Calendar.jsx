@@ -17,6 +17,77 @@ export default function Calendar({ view = "mês", setView }) {
   const [showPopup, setShowPopup] = useState(false);
   const [events, setEvents] = useState([]); // eventos originais salvos
   const [mode, setMode] = useState(view); // controle interno de view
+  const [loading, setLoading] = useState(false);
+
+  // Carregar eventos ao montar o componente
+  useEffect(() => {
+    async function fetchEvents() {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+          console.log('Sem token, não vai buscar eventos');
+          setLoading(false);
+          return;
+        }
+
+        const response = await fetch('https://api.uecehit.com.br/api/events/', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Eventos recebidos da API:', data);
+          
+          // Converter eventos da API para o formato interno
+          const eventosFormatados = data.map(evento => {
+            // Extrair apenas a data (YYYY-MM-DD) do data_inicio
+            const dataEvento = evento.data_inicio.split('T')[0];
+            
+            // Extrair hora (HH:MM) do data_inicio
+            const horaEvento = evento.data_inicio.split('T')[1]?.substring(0, 5) || "00:00";
+            
+            // Mapear tipo_evento de volta para periodicidade
+            let periodicidade = "Evento Único";
+            if (evento.tipo_evento === "diario") {
+              periodicidade = "Diário";
+            } else if (evento.tipo_evento === "semanal") {
+              periodicidade = "Semanal";
+            } else if (evento.tipo_evento === "mensal") {
+              periodicidade = "Mensal";
+            }
+            
+            return {
+              id: evento.id,
+              nome: evento.titulo,
+              data: dataEvento,
+              hora: horaEvento,
+              local: evento.local || "",
+              categoria: evento.categoria || "",
+              grupo: evento.grupo_id,
+              turma: evento.turma_id,
+              periodicidade: periodicidade,
+              descricao: evento.descricao || ""
+            };
+          });
+          
+          console.log('Eventos formatados:', eventosFormatados);
+          setEvents(eventosFormatados);
+        } else {
+          console.error('Erro ao buscar eventos:', response.status);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar eventos:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchEvents();
+  }, []);
 
   useEffect(() => {
   setMode(view);
@@ -162,34 +233,120 @@ export default function Calendar({ view = "mês", setView }) {
   // --- popup form component (inline) ---
   function PopupCriarEvento() {
     const [nome, setNome] = useState("");
+    const [descricao, setDescricao] = useState("");
     const [dataInput, setDataInput] = useState(() => {
       const d = new Date();
       return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
     });
     const [hora, setHora] = useState("");
+    const [horaFim, setHoraFim] = useState("");
     const [local, setLocal] = useState("");
     const [categoria, setCategoria] = useState("");
     const [grupo, setGrupo] = useState("");
+    const [turma, setTurma] = useState("");
     const [periodicidade, setPeriodicidade] = useState("Evento Único");
+    const [salvando, setSalvando] = useState(false);
 
-    function salvar() {
-      if (!nome || !dataInput) { alert("Preencha nome e data"); return; }
-      setEvents(prev => [...prev, {
-        nome,
-        data: dataInput, // 'YYYY-MM-DD'
-        hora, // 'HH:MM'
-        local,
-        categoria,
-        grupo,
-        periodicidade
-      }]);
-      setShowPopup(false);
+    async function salvar() {
+      if (!nome || !dataInput) { 
+        return; 
+      }
+
+      setSalvando(true);
+      
+      try {
+        const token = localStorage.getItem('access_token');
+        
+        if (!token) {
+          console.error('Token não encontrado');
+          setSalvando(false);
+          return;
+        }
+        
+        // Construir data_inicio e data_fim no formato ISO
+        const horaInicio = hora || "00:00";
+        const horaFinal = horaFim || (hora ? `${String(Number(hora.split(':')[0]) + 1).padStart(2, '0')}:${hora.split(':')[1]}` : "23:59");
+        const data_inicio = `${dataInput}T${horaInicio}:00`;
+        const data_fim = `${dataInput}T${horaFinal}:00`;
+
+        // Mapear periodicidade para tipo_evento correto (API não aceita 'evento_recorrente')
+        let tipo_evento = "evento_unico";
+        
+        const pdLower = periodicidade.toLowerCase();
+        
+        if (pdLower === "diário" || pdLower === "diario") {
+          tipo_evento = "diario";
+        } else if (pdLower === "semanal") {
+          tipo_evento = "semanal";
+        } else if (pdLower === "mensal") {
+          tipo_evento = "mensal";
+        }
+
+        const body = {
+          titulo: nome,
+          descricao: descricao || "",
+          data_inicio,
+          data_fim,
+          categoria: categoria.toLowerCase() || "pessoal",
+          local: local || "",
+          tipo_evento
+        };
+
+        // Apenas adicionar grupo_id e turma_id se tiverem valores
+        if (grupo) body.grupo_id = Number(grupo);
+        if (turma) body.turma_id = Number(turma);
+
+        console.log('Enviando evento para API:', body);
+
+        const response = await fetch('https://api.uecehit.com.br/api/events/', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+
+        console.log('Status resposta:', response.status);
+
+        if (response.ok) {
+          const novoEvento = await response.json();
+          console.log('Evento criado com sucesso:', novoEvento);
+          
+          // Adicionar ao state local no formato interno
+          setEvents(prev => [...prev, {
+            id: novoEvento.id,
+            nome: novoEvento.titulo,
+            data: dataInput,
+            hora: horaInicio,
+            local: novoEvento.local,
+            categoria: novoEvento.categoria,
+            grupo: novoEvento.grupo_id,
+            periodicidade,
+            descricao: novoEvento.descricao
+          }]);
+          
+          setShowPopup(false);
+        } else {
+          const errorText = await response.text();
+          console.error('Erro ao criar evento - Status:', response.status);
+          console.error('Resposta do servidor:', errorText);
+          try {
+            const errorJson = JSON.parse(errorText);
+            console.error('Detalhes do erro:', errorJson);
+            alert(`Erro: ${errorJson.detail || 'Erro desconhecido'}`);
+          } catch (e) {
+            console.error('Erro não é JSON:', errorText);
+            alert('Erro ao criar evento. Tente novamente.');
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao salvar evento:', error);
+        alert('Erro de conexão. Verifique sua internet.');
+      } finally {
+        setSalvando(false);
+      }
     }
-
-    const inputStyle = {
-      width: "100%", padding: "12px", border: "none", borderRadius: 8,
-      boxShadow: "0 2px 8px rgba(0,0,0,0.10)", fontFamily: "Noto Sans Gujarati", color: "#424040"
-    };
 
     return (
       <div className="popup-overlay">
@@ -199,9 +356,18 @@ export default function Calendar({ view = "mês", setView }) {
 
           <input className="popup-input" placeholder="Nome do Evento:" value={nome} onChange={e=>setNome(e.target.value)} />
 
+          <textarea 
+            className="popup-input" 
+            placeholder="Descrição (opcional):" 
+            value={descricao} 
+            onChange={e=>setDescricao(e.target.value)}
+            style={{minHeight: 60, resize: 'vertical'}}
+          />
+
           <div style={{display:"flex", gap:12, marginTop:12}}>
             <input type="date" className="popup-input" value={dataInput} onChange={e=>setDataInput(e.target.value)} />
-            <input type="time" className="popup-input" value={hora} onChange={e=>setHora(e.target.value)} style={{width:150}} />
+            <input type="time" className="popup-input" placeholder="Início" value={hora} onChange={e=>setHora(e.target.value)} style={{width:150}} />
+            <input type="time" className="popup-input" placeholder="Fim" value={horaFim} onChange={e=>setHoraFim(e.target.value)} style={{width:150}} />
           </div>
 
           <input className="popup-input" placeholder="Local:" value={local} onChange={e=>setLocal(e.target.value)} />
@@ -209,11 +375,10 @@ export default function Calendar({ view = "mês", setView }) {
           <div style={{display:"flex", gap:12}}>
             <select className="popup-input" value={categoria} onChange={e=>setCategoria(e.target.value)}>
               <option value="">Selecione uma categoria</option>
-              <option>Pessoal</option><option>Reunião</option><option>Provas</option><option>Atividades Acadêmicas</option>
-            </select>
-            <select className="popup-input" value={grupo} onChange={e=>setGrupo(e.target.value)}>
-              <option value="">Selecione um grupo/turma</option>
-              <option>Geral</option><option>Turma de Eng. de Software</option><option>Turma de APS</option>
+              <option value="pessoal">Pessoal</option>
+              <option value="reuniao">Reunião</option>
+              <option value="provas">Provas</option>
+              <option value="atividades_academicas">Atividades Acadêmicas</option>
             </select>
           </div>
 
@@ -225,8 +390,10 @@ export default function Calendar({ view = "mês", setView }) {
           </select>
 
           <div style={{display:"flex", justifyContent:"flex-end", marginTop:14}}>
-            <button className="btn-cancel" onClick={()=>setShowPopup(false)}>Cancelar</button>
-            <button className="btn-save" onClick={salvar}>Salvar</button>
+            <button className="btn-cancel" onClick={()=>setShowPopup(false)} disabled={salvando}>Cancelar</button>
+            <button className="btn-save" onClick={salvar} disabled={salvando}>
+              {salvando ? 'Salvando...' : 'Salvar'}
+            </button>
           </div>
         </div>
       </div>
@@ -259,6 +426,143 @@ export default function Calendar({ view = "mês", setView }) {
 
   // --- day view events (all occurrences for that date) ---
   const occurrencesForCurrentDay = occurrences.filter(o => toYYYYMMDD(o.date) === toYYYYMMDD(date));
+
+  // EXPANDIR RECORRÊNCIAS (gera instâncias futuras)
+  function expandRecurrences(evts) {
+    const expanded = [];
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    // Definir até quando expandir (ex: 1 ano no futuro)
+    const umAnoDepois = new Date(hoje);
+    umAnoDepois.setFullYear(umAnoDepois.getFullYear() + 1);
+
+    evts.forEach((ev) => {
+      const [ano, mes, dia] = ev.data.split("-").map(Number);
+      const dtOriginal = new Date(ano, mes - 1, dia);
+
+      const pdLower = (ev.periodicidade || "").toLowerCase();
+
+      if (pdLower === "evento único" || pdLower === "evento unico" || !pdLower) {
+        // Apenas o evento original
+        expanded.push(ev);
+      } else if (pdLower === "diário" || pdLower === "diario") {
+        // Gerar cópia a cada dia, começando da data original
+        let cursor = new Date(dtOriginal);
+        while (cursor <= umAnoDepois) {
+          if (cursor >= hoje) {
+            const yyyy = cursor.getFullYear();
+            const mm = String(cursor.getMonth() + 1).padStart(2, "0");
+            const dd = String(cursor.getDate()).padStart(2, "0");
+            expanded.push({ ...ev, data: `${yyyy}-${mm}-${dd}` });
+          }
+          cursor.setDate(cursor.getDate() + 1);
+        }
+      } else if (pdLower === "semanal") {
+        // A cada 7 dias
+        let cursor = new Date(dtOriginal);
+        while (cursor <= umAnoDepois) {
+          if (cursor >= hoje) {
+            const yyyy = cursor.getFullYear();
+            const mm = String(cursor.getMonth() + 1).padStart(2, "0");
+            const dd = String(cursor.getDate()).padStart(2, "0");
+            expanded.push({ ...ev, data: `${yyyy}-${mm}-${dd}` });
+          }
+          cursor.setDate(cursor.getDate() + 7);
+        }
+      } else if (pdLower === "mensal") {
+        // Mesmo dia de cada mês
+        let cursor = new Date(dtOriginal);
+        const diaDoMes = cursor.getDate();
+        while (cursor <= umAnoDepois) {
+          if (cursor >= hoje) {
+            const yyyy = cursor.getFullYear();
+            const mm = String(cursor.getMonth() + 1).padStart(2, "0");
+            const dd = String(cursor.getDate()).padStart(2, "0");
+            expanded.push({ ...ev, data: `${yyyy}-${mm}-${dd}` });
+          }
+          cursor.setMonth(cursor.getMonth() + 1);
+          // Ajustar dia (caso o próximo mês não tenha o mesmo dia)
+          if (cursor.getDate() !== diaDoMes) {
+            cursor.setDate(0); // último dia do mês anterior
+          }
+        }
+      } else {
+        // Periodicidade desconhecida, só adiciona o original
+        expanded.push(ev);
+      }
+    });
+
+    return expanded;
+  }
+
+  // APLICAR RECORRÊNCIAS
+  const expandedEvents = useMemo(() => expandRecurrences(events), [events]);
+
+  // Nas funções de renderização (renderMonth, renderWeek, renderDay),
+  // certifique-se de usar expandedEvents, não events
+
+  function renderMonth() {
+    const y = date.getFullYear();
+    const m = date.getMonth();
+    const firstDay = new Date(y, m, 1).getDay();
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+
+    const rows = [];
+    let cells = [];
+    let dayCounter = 1;
+
+    for (let i = 0; i < firstDay; i++) {
+      cells.push(<div key={`empty-${i}`} className="calendar-day empty" />);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+      
+      // IMPORTANTE: usar expandedEvents aqui
+      const dayEvents = expandedEvents.filter((e) => e.data === dateStr);
+
+      cells.push(
+        <div key={d} className="calendar-day">
+          <div className="day-number">{d}</div>
+          {dayEvents.map((evt, idx) => (
+            <div
+              key={`${evt.id}-${idx}`}
+              className={`event-pill ${evt.categoria || "pessoal"}`}
+              title={evt.nome}
+            >
+              {evt.nome}
+            </div>
+          ))}
+        </div>
+      );
+
+      if (cells.length === 7) {
+        rows.push(
+          <div key={`week-${dayCounter}`} className="calendar-week">
+            {cells}
+          </div>
+        );
+        cells = [];
+        dayCounter++;
+      }
+    }
+
+    if (cells.length > 0) {
+      while (cells.length < 7) {
+        cells.push(
+          <div key={`empty-end-${cells.length}`} className="calendar-day empty" />
+        );
+      }
+      rows.push(
+        <div key="week-last" className="calendar-week">
+          {cells}
+        </div>
+      );
+    }
+
+    return <div className="calendar-grid">{rows}</div>;
+  }
 
   return (
     <div className="calendar-wrapper">
