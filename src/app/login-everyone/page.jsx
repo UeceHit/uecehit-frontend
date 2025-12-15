@@ -47,9 +47,10 @@ export default function LoginPage() {
         let errorMessage = ERROR_MESSAGES[response.status];
 
         if (!errorMessage) {
-          errorMessage = errorData?.detail?.[0]?.msg
-                       || errorData?.detail
-                       || ERROR_MESSAGES.DEFAULT; 
+          errorMessage =
+            errorData?.detail?.[0]?.msg ||
+            errorData?.detail ||
+            ERROR_MESSAGES.DEFAULT;
         }
 
         throw new Error(errorMessage);
