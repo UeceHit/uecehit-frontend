@@ -18,6 +18,9 @@ export default function Calendar({ view = "mês", setView }) {
   const [events, setEvents] = useState([]); // eventos originais salvos
   const [mode, setMode] = useState(view); // controle interno de view
   const [loading, setLoading] = useState(false);
+  // novos códigos
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [showEventModal, setShowEventModal] = useState(false);
 
   // Carregar eventos ao montar o componente
   useEffect(() => {
@@ -401,15 +404,53 @@ export default function Calendar({ view = "mês", setView }) {
   }
 
   // --- RENDER helpers for event pill ---
-  function EventPill({occ}) {
-    // occ: { name, time (HH:MM|null), date: Date }
-    return (
-      <div className="event-pill">
-        <span className="event-dot" />
-        <span className="event-text">{occ.name}</span>
+  //novo código
+  function EventPill({ occ, onClick }) {
+  return (
+    <div className="event-pill" onClick={onClick} style={{ cursor: "pointer" }}>
+      <span className="event-dot" />
+      <span className="event-text">{occ.name}</span>
+    </div>
+  );
+}
+
+  // novo código
+  function PopupVisualizarEvento({ event, onClose }) {
+  if (!event) return null;
+
+  return (
+    <div className="popup-overlay">
+      <div className="popup-card" role="dialog" aria-modal="true">
+        <button className="popup-close" onClick={onClose}>✕</button>
+
+        <h2 className="popup-title">{event.name}</h2>
+
+        <p><strong>Data:</strong> {event.date.toLocaleDateString()}</p>
+        <p><strong>Horário:</strong> {event.time || "Não informado"}</p>
+        <p><strong>Local:</strong> {event.local || "Não informado"}</p>
+        <p><strong>Categoria:</strong> {event.categoria || "—"}</p>
+
+        {event.grupo && (
+          <p><strong>Grupo:</strong> {event.grupo}</p>
+        )}
+
+        <div style={{ marginTop: 20, display: "flex", justifyContent: "flex-end" }}>
+          <button className="btn-cancel" onClick={onClose}>
+            Fechar
+          </button>
+
+          <button
+            className="btn-save"
+            style={{ background: "#D9534F", marginLeft: 10 }}
+          >
+            Deletar Evento
+          </button>
+        </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
+
 
   // --- month view event lookup by day ---
   function eventsForDay(dayNumber) {
@@ -568,6 +609,16 @@ export default function Calendar({ view = "mês", setView }) {
     <div className="calendar-wrapper">
 
       {showPopup && <PopupCriarEvento />}
+      {/* novo código */}
+      {showEventModal && (
+      <PopupVisualizarEvento
+        event={selectedEvent}
+        onClose={() => {
+          setShowEventModal(false);
+          setSelectedEvent(null);
+        }}
+      />
+    )}
 
       {/* Botão CRIAR + (direita acima do switch) */}
       <div style={{width:"100%", display:"flex", justifyContent:"flex-end", marginBottom:12}}>
@@ -666,7 +717,13 @@ export default function Calendar({ view = "mês", setView }) {
                     <div className="day-events">
                       {eventsForDay(day).map((occ, idx) => (
                         <div key={occ.id || idx} className="month-event-wrap">
-                          <EventPill occ={occ} />
+                          <EventPill
+                            occ={occ}
+                            onClick={() => {
+                              setSelectedEvent(occ);
+                              setShowEventModal(true);
+                            }}
+                          />
                         </div>
                       ))}
                     </div>
@@ -714,7 +771,13 @@ export default function Calendar({ view = "mês", setView }) {
                         const top = ( (hh - 6) * 50 ) + (mm? (mm/60)*50 : 0);
                         return (
                           <div key={k} className="week-event" style={{ top: top }}>
-                            <EventPill occ={occ} />
+                            <EventPill
+                              occ={occ}
+                              onClick={() => {
+                                setSelectedEvent(occ);
+                                setShowEventModal(true);
+                              }}
+                            />
                           </div>
                         );
                       } else {
@@ -752,13 +815,25 @@ export default function Calendar({ view = "mês", setView }) {
                 {/* place events for this exact hour */}
                 {hourEvents.map((occ, k) => (
                   <div key={k} style={{position:"absolute", left:120 + 12 + (k*8), top: idx*50 + 6, zIndex:10}}>
-                    <EventPill occ={occ} />
+                    <EventPill
+                      occ={occ}
+                      onClick={() => {
+                        setSelectedEvent(occ);
+                        setShowEventModal(true);
+                      }}
+                    />
                   </div>
                 ))}
                 {/* place no-time events at top only once */}
                 {idx===0 && noTimeEvents.map((occ,k)=>(
                   <div key={k} style={{position:"absolute", left:120 + 12, top:6}}>
-                    <EventPill occ={occ} />
+                    <EventPill
+                      occ={occ}
+                      onClick={() => {
+                        setSelectedEvent(occ);
+                        setShowEventModal(true);
+                      }}
+                    />
                   </div>
                 ))}
               </div>

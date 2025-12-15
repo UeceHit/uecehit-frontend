@@ -261,3 +261,9 @@ body.dark-mode .btn-cancel {
 body.dark-mode .popup-close {
   color: white;
 }
+
+.popup-card p {
+  margin: 8px 0;
+  font-size: 15px;
+  color: #424040;
+}
