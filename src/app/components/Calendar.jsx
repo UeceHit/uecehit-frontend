@@ -21,46 +21,72 @@ export default function Calendar({ view = "mês", setView }) {
 
   // Carregar eventos ao montar o componente
   useEffect(() => {
-    const loadEvents = async () => {
+    async function fetchEvents() {
+      setLoading(true);
       try {
-        setLoading(true);
         const token = localStorage.getItem('access_token');
-        
         if (!token) {
+          console.log('Sem token, não vai buscar eventos');
+          setLoading(false);
           return;
         }
-        
+
         const response = await fetch('https://api.uecehit.com.br/api/events/', {
           headers: {
-            'Authorization': 'Bearer ' + token,
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
-        
+
         if (response.ok) {
           const data = await response.json();
-          // Converter formato da API para formato interno
-          const formattedEvents = data.map(evt => ({
-            id: evt.id,
-            nome: evt.titulo,
-            data: evt.data_inicio.split('T')[0], // extrair YYYY-MM-DD
-            hora: evt.data_inicio.split('T')[1]?.substring(0, 5) || '', // extrair HH:MM
-            local: evt.local,
-            categoria: evt.categoria,
-            grupo: evt.grupo_id,
-            periodicidade: evt.tipo_evento === 'evento_unico' ? 'Evento Único' : evt.recorrencia || '',
-            descricao: evt.descricao
-          }));
-          setEvents(formattedEvents);
+          console.log('Eventos recebidos da API:', data);
+          
+          // Converter eventos da API para o formato interno
+          const eventosFormatados = data.map(evento => {
+            // Extrair apenas a data (YYYY-MM-DD) do data_inicio
+            const dataEvento = evento.data_inicio.split('T')[0];
+            
+            // Extrair hora (HH:MM) do data_inicio
+            const horaEvento = evento.data_inicio.split('T')[1]?.substring(0, 5) || "00:00";
+            
+            // Mapear tipo_evento de volta para periodicidade
+            let periodicidade = "Evento Único";
+            if (evento.tipo_evento === "diario") {
+              periodicidade = "Diário";
+            } else if (evento.tipo_evento === "semanal") {
+              periodicidade = "Semanal";
+            } else if (evento.tipo_evento === "mensal") {
+              periodicidade = "Mensal";
+            }
+            
+            return {
+              id: evento.id,
+              nome: evento.titulo,
+              data: dataEvento,
+              hora: horaEvento,
+              local: evento.local || "",
+              categoria: evento.categoria || "",
+              grupo: evento.grupo_id,
+              turma: evento.turma_id,
+              periodicidade: periodicidade,
+              descricao: evento.descricao || ""
+            };
+          });
+          
+          console.log('Eventos formatados:', eventosFormatados);
+          setEvents(eventosFormatados);
+        } else {
+          console.error('Erro ao buscar eventos:', response.status);
         }
       } catch (error) {
         console.error('Erro ao carregar eventos:', error);
       } finally {
         setLoading(false);
       }
-    };
-    
-    loadEvents();
+    }
+
+    fetchEvents();
   }, []);
 
   useEffect(() => {
@@ -243,19 +269,17 @@ export default function Calendar({ view = "mês", setView }) {
         const data_inicio = `${dataInput}T${horaInicio}:00`;
         const data_fim = `${dataInput}T${horaFinal}:00`;
 
-        // Mapear periodicidade para tipo_evento e recorrencia
+        // Mapear periodicidade para tipo_evento correto (API não aceita 'evento_recorrente')
         let tipo_evento = "evento_unico";
-        let recorrencia = null;
         
-        if (periodicidade.toLowerCase() === "diário" || periodicidade.toLowerCase() === "diario") {
-          tipo_evento = "evento_recorrente";
-          recorrencia = "diaria";
-        } else if (periodicidade.toLowerCase() === "semanal") {
-          tipo_evento = "evento_recorrente";
-          recorrencia = "semanal";
-        } else if (periodicidade.toLowerCase() === "mensal") {
-          tipo_evento = "evento_recorrente";
-          recorrencia = "mensal";
+        const pdLower = periodicidade.toLowerCase();
+        
+        if (pdLower === "diário" || pdLower === "diario") {
+          tipo_evento = "diario";
+        } else if (pdLower === "semanal") {
+          tipo_evento = "semanal";
+        } else if (pdLower === "mensal") {
+          tipo_evento = "mensal";
         }
 
         const body = {
@@ -265,11 +289,12 @@ export default function Calendar({ view = "mês", setView }) {
           data_fim,
           categoria: categoria.toLowerCase() || "pessoal",
           local: local || "",
-          tipo_evento,
-          recorrencia,
-          grupo_id: grupo ? Number(grupo) : null,
-          turma_id: turma ? Number(turma) : null
+          tipo_evento
         };
+
+        // Apenas adicionar grupo_id e turma_id se tiverem valores
+        if (grupo) body.grupo_id = Number(grupo);
+        if (turma) body.turma_id = Number(turma);
 
         console.log('Enviando evento para API:', body);
 
@@ -309,12 +334,15 @@ export default function Calendar({ view = "mês", setView }) {
           try {
             const errorJson = JSON.parse(errorText);
             console.error('Detalhes do erro:', errorJson);
+            alert(`Erro: ${errorJson.detail || 'Erro desconhecido'}`);
           } catch (e) {
             console.error('Erro não é JSON:', errorText);
+            alert('Erro ao criar evento. Tente novamente.');
           }
         }
       } catch (error) {
         console.error('Erro ao salvar evento:', error);
+        alert('Erro de conexão. Verifique sua internet.');
       } finally {
         setSalvando(false);
       }
@@ -352,20 +380,6 @@ export default function Calendar({ view = "mês", setView }) {
               <option value="provas">Provas</option>
               <option value="atividades_academicas">Atividades Acadêmicas</option>
             </select>
-            <input 
-              className="popup-input" 
-              type="number" 
-              placeholder="ID do Grupo (opcional)" 
-              value={grupo} 
-              onChange={e=>setGrupo(e.target.value)} 
-            />
-            <input 
-              className="popup-input" 
-              type="number" 
-              placeholder="ID da Turma (opcional)" 
-              value={turma} 
-              onChange={e=>setTurma(e.target.value)} 
-            />
           </div>
 
           <select className="popup-input" value={periodicidade} onChange={e=>setPeriodicidade(e.target.value)}>
@@ -412,6 +426,143 @@ export default function Calendar({ view = "mês", setView }) {
 
   // --- day view events (all occurrences for that date) ---
   const occurrencesForCurrentDay = occurrences.filter(o => toYYYYMMDD(o.date) === toYYYYMMDD(date));
+
+  // EXPANDIR RECORRÊNCIAS (gera instâncias futuras)
+  function expandRecurrences(evts) {
+    const expanded = [];
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    // Definir até quando expandir (ex: 1 ano no futuro)
+    const umAnoDepois = new Date(hoje);
+    umAnoDepois.setFullYear(umAnoDepois.getFullYear() + 1);
+
+    evts.forEach((ev) => {
+      const [ano, mes, dia] = ev.data.split("-").map(Number);
+      const dtOriginal = new Date(ano, mes - 1, dia);
+
+      const pdLower = (ev.periodicidade || "").toLowerCase();
+
+      if (pdLower === "evento único" || pdLower === "evento unico" || !pdLower) {
+        // Apenas o evento original
+        expanded.push(ev);
+      } else if (pdLower === "diário" || pdLower === "diario") {
+        // Gerar cópia a cada dia, começando da data original
+        let cursor = new Date(dtOriginal);
+        while (cursor <= umAnoDepois) {
+          if (cursor >= hoje) {
+            const yyyy = cursor.getFullYear();
+            const mm = String(cursor.getMonth() + 1).padStart(2, "0");
+            const dd = String(cursor.getDate()).padStart(2, "0");
+            expanded.push({ ...ev, data: `${yyyy}-${mm}-${dd}` });
+          }
+          cursor.setDate(cursor.getDate() + 1);
+        }
+      } else if (pdLower === "semanal") {
+        // A cada 7 dias
+        let cursor = new Date(dtOriginal);
+        while (cursor <= umAnoDepois) {
+          if (cursor >= hoje) {
+            const yyyy = cursor.getFullYear();
+            const mm = String(cursor.getMonth() + 1).padStart(2, "0");
+            const dd = String(cursor.getDate()).padStart(2, "0");
+            expanded.push({ ...ev, data: `${yyyy}-${mm}-${dd}` });
+          }
+          cursor.setDate(cursor.getDate() + 7);
+        }
+      } else if (pdLower === "mensal") {
+        // Mesmo dia de cada mês
+        let cursor = new Date(dtOriginal);
+        const diaDoMes = cursor.getDate();
+        while (cursor <= umAnoDepois) {
+          if (cursor >= hoje) {
+            const yyyy = cursor.getFullYear();
+            const mm = String(cursor.getMonth() + 1).padStart(2, "0");
+            const dd = String(cursor.getDate()).padStart(2, "0");
+            expanded.push({ ...ev, data: `${yyyy}-${mm}-${dd}` });
+          }
+          cursor.setMonth(cursor.getMonth() + 1);
+          // Ajustar dia (caso o próximo mês não tenha o mesmo dia)
+          if (cursor.getDate() !== diaDoMes) {
+            cursor.setDate(0); // último dia do mês anterior
+          }
+        }
+      } else {
+        // Periodicidade desconhecida, só adiciona o original
+        expanded.push(ev);
+      }
+    });
+
+    return expanded;
+  }
+
+  // APLICAR RECORRÊNCIAS
+  const expandedEvents = useMemo(() => expandRecurrences(events), [events]);
+
+  // Nas funções de renderização (renderMonth, renderWeek, renderDay),
+  // certifique-se de usar expandedEvents, não events
+
+  function renderMonth() {
+    const y = date.getFullYear();
+    const m = date.getMonth();
+    const firstDay = new Date(y, m, 1).getDay();
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+
+    const rows = [];
+    let cells = [];
+    let dayCounter = 1;
+
+    for (let i = 0; i < firstDay; i++) {
+      cells.push(<div key={`empty-${i}`} className="calendar-day empty" />);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+      
+      // IMPORTANTE: usar expandedEvents aqui
+      const dayEvents = expandedEvents.filter((e) => e.data === dateStr);
+
+      cells.push(
+        <div key={d} className="calendar-day">
+          <div className="day-number">{d}</div>
+          {dayEvents.map((evt, idx) => (
+            <div
+              key={`${evt.id}-${idx}`}
+              className={`event-pill ${evt.categoria || "pessoal"}`}
+              title={evt.nome}
+            >
+              {evt.nome}
+            </div>
+          ))}
+        </div>
+      );
+
+      if (cells.length === 7) {
+        rows.push(
+          <div key={`week-${dayCounter}`} className="calendar-week">
+            {cells}
+          </div>
+        );
+        cells = [];
+        dayCounter++;
+      }
+    }
+
+    if (cells.length > 0) {
+      while (cells.length < 7) {
+        cells.push(
+          <div key={`empty-end-${cells.length}`} className="calendar-day empty" />
+        );
+      }
+      rows.push(
+        <div key="week-last" className="calendar-week">
+          {cells}
+        </div>
+      );
+    }
+
+    return <div className="calendar-grid">{rows}</div>;
+  }
 
   return (
     <div className="calendar-wrapper">
