@@ -18,6 +18,9 @@ export default function Calendar({ view = "mês", setView }) {
   const [events, setEvents] = useState([]); // eventos originais salvos
   const [mode, setMode] = useState(view); // controle interno de view
   const [loading, setLoading] = useState(false);
+  // novos códigos
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [showEventModal, setShowEventModal] = useState(false);
 
   // Carregar eventos ao montar o componente
   useEffect(() => {
@@ -401,15 +404,61 @@ export default function Calendar({ view = "mês", setView }) {
   }
 
   // --- RENDER helpers for event pill ---
-  function EventPill({occ}) {
-    // occ: { name, time (HH:MM|null), date: Date }
-    return (
-      <div className="event-pill">
-        <span className="event-dot" />
-        <span className="event-text">{occ.name}</span>
+  //novo código
+  function EventPill({ occ, onClick }) {
+  return (
+    <div className="event-pill" onClick={onClick} style={{ cursor: "pointer" }}>
+      <span className="event-dot" />
+      <span className="event-text">{occ.name}</span>
+    </div>
+  );
+}
+
+  // novo código
+  function PopupVisualizarEvento({ event, onClose }) {
+  if (!event) return null;
+
+  // Função para formatar o nome da categoria
+  const formatarCategoria = (categoria) => {
+    const categorias = {
+      'pessoal': 'Pessoal',
+      'reuniao': 'Reunião',
+      'provas': 'Provas',
+      'atividades_academicas': 'Atividades Acadêmicas'
+    };
+    return categorias[categoria] || categoria || 'Sem categoria';
+  };
+
+  return (
+    <div className="popup-overlay" onClick={onClose}>
+      <div className="popup-visualizar-evento" onClick={(e) => e.stopPropagation()}>
+        <button className="popup-close" onClick={onClose}>✕</button>
+
+        <h2 className="evento-titulo">{event.name}</h2>
+
+        <div className="evento-info">
+          <p className="evento-data">Data: {event.date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
+          <p className="evento-horario">Horário: {event.time || "10:00"}</p>
+          <p className="evento-local">Local: {event.local || "Mini Auditório NCSA"}</p>
+        </div>
+
+        <div className="evento-filtros">
+          <span className="filtro-tag">{formatarCategoria(event.categoria)}</span>
+        </div>
+
+        <button className="btn-deletar-evento" onClick={() => {
+          if (confirm('Deseja realmente deletar este evento?')) {
+            // TODO: implementar deleção
+            onClose();
+          }
+        }}>
+          Deletar Evento
+        </button>
       </div>
-    );
-  }
+    </div>
+  );
+}
+
 
   // --- month view event lookup by day ---
   function eventsForDay(dayNumber) {
@@ -568,6 +617,16 @@ export default function Calendar({ view = "mês", setView }) {
     <div className="calendar-wrapper">
 
       {showPopup && <PopupCriarEvento />}
+      {/* novo código */}
+      {showEventModal && (
+      <PopupVisualizarEvento
+        event={selectedEvent}
+        onClose={() => {
+          setShowEventModal(false);
+          setSelectedEvent(null);
+        }}
+      />
+    )}
 
       {/* Botão CRIAR + (direita acima do switch) */}
       <div style={{width:"100%", display:"flex", justifyContent:"flex-end", marginBottom:12}}>
@@ -666,7 +725,13 @@ export default function Calendar({ view = "mês", setView }) {
                     <div className="day-events">
                       {eventsForDay(day).map((occ, idx) => (
                         <div key={occ.id || idx} className="month-event-wrap">
-                          <EventPill occ={occ} />
+                          <EventPill
+                            occ={occ}
+                            onClick={() => {
+                              setSelectedEvent(occ);
+                              setShowEventModal(true);
+                            }}
+                          />
                         </div>
                       ))}
                     </div>
@@ -714,7 +779,13 @@ export default function Calendar({ view = "mês", setView }) {
                         const top = ( (hh - 6) * 50 ) + (mm? (mm/60)*50 : 0);
                         return (
                           <div key={k} className="week-event" style={{ top: top }}>
-                            <EventPill occ={occ} />
+                            <EventPill
+                              occ={occ}
+                              onClick={() => {
+                                setSelectedEvent(occ);
+                                setShowEventModal(true);
+                              }}
+                            />
                           </div>
                         );
                       } else {
@@ -752,13 +823,25 @@ export default function Calendar({ view = "mês", setView }) {
                 {/* place events for this exact hour */}
                 {hourEvents.map((occ, k) => (
                   <div key={k} style={{position:"absolute", left:120 + 12 + (k*8), top: idx*50 + 6, zIndex:10}}>
-                    <EventPill occ={occ} />
+                    <EventPill
+                      occ={occ}
+                      onClick={() => {
+                        setSelectedEvent(occ);
+                        setShowEventModal(true);
+                      }}
+                    />
                   </div>
                 ))}
                 {/* place no-time events at top only once */}
                 {idx===0 && noTimeEvents.map((occ,k)=>(
                   <div key={k} style={{position:"absolute", left:120 + 12, top:6}}>
-                    <EventPill occ={occ} />
+                    <EventPill
+                      occ={occ}
+                      onClick={() => {
+                        setSelectedEvent(occ);
+                        setShowEventModal(true);
+                      }}
+                    />
                   </div>
                 ))}
               </div>
