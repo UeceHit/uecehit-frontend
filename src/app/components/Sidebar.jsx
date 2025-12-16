@@ -23,7 +23,8 @@ export default function Sidebar({
   showConsultarPresenca = true,
   showTurmasGrupos = true,
   showConsultarTurmas = false,
-  isAdmin = false // Nova prop para identificar se é administrador
+  isAdmin = false,
+  onCriarGrupoClick = null // Nova prop opcional para customizar comportamento
 }) {
   const [open, setOpen] = useState(false);
 
@@ -129,7 +130,15 @@ export default function Sidebar({
           <div
             className="sidebar-item"
             style={{ marginBottom: "50px" }}
-            onClick={() => isAdmin ? setShowCriarTurma(true) : setShowCriarGrupo(true)}
+            onClick={() => {
+              if (onCriarGrupoClick) {
+                onCriarGrupoClick();
+              } else if (isAdmin) {
+                setShowCriarTurma(true);
+              } else {
+                setShowCriarGrupo(true);
+              }
+            }}
           >
             <Users />
             {open && <span>{isAdmin ? "Criar Turma" : "Criar Grupo"}</span>}
