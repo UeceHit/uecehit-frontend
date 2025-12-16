@@ -23,8 +23,9 @@
   background: linear-gradient(90deg, #3b8cf6, #aee9ff);
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
   z-index: 100;
 }
 

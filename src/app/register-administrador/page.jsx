@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import "./style.css";
 import Link from "next/link";
@@ -12,6 +12,14 @@ export default function RegisterAdministrador() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // Aplicar classe ao body quando o componente montar
+  useEffect(() => {
+    document.body.classList.add('register-admin-active');
+    return () => {
+      document.body.classList.remove('register-admin-active');
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

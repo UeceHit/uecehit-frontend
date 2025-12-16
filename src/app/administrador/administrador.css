@@ -1,3 +1,10 @@
+/* Reset do body para páginas de calendário */
+body {
+  display: block !important;
+  background-color: #ffffff !important;
+  padding-top: 110px !important;
+}
+
 /* Modo escuro - Calendário Universitário */
 body.dark-mode .calendar-info {
   color: #ffffff;

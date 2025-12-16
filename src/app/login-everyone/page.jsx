@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./style.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,6 +18,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Aplicar classe ao body quando o componente montar
+  useEffect(() => {
+    document.body.classList.add('login-page-active');
+    return () => {
+      document.body.classList.remove('login-page-active');
+    };
+  }, []);
 
   async function handleLogin(e) {
     e.preventDefault();
