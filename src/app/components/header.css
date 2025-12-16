@@ -51,6 +51,15 @@
 }
 
 /* ============================
+   HEADER RIGHT (Botões)
+============================ */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ============================
    NAV LINKS (caso use)
 ============================ */
 .header-nav {
@@ -121,4 +130,233 @@ body.dark-mode .header-nav a {
 
 body.dark-mode .theme-btn {
   background: rgba(255, 255, 255, 0.15);
+}
+
+/* ============================
+   NOTIFICAÇÕES
+============================ */
+
+.notification-container {
+  position: relative;
+}
+
+.notification-btn {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.notification-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #C64139;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border: 2px solid #3b8cf6;
+}
+
+.notification-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  z-index: 998;
+}
+
+.notification-popup {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 380px;
+  max-height: 500px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  overflow: hidden;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.notification-header {
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #3b8cf6, #aee9ff);
+}
+
+.notification-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.notification-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.notification-list {
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.notification-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+}
+
+.notification-item {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  position: relative;
+}
+
+.notification-item:hover {
+  background: #f8f8f8;
+}
+
+.notification-item.unread {
+  background: #f0f7ff;
+}
+
+.notification-item.unread:hover {
+  background: #e6f2ff;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-content h4 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.notification-content p {
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.notification-time {
+  font-size: 11px;
+  color: #999;
+}
+
+.notification-dot {
+  width: 8px;
+  height: 8px;
+  background: #3b8cf6;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+/* Dark mode para notificações */
+body.dark-mode .notification-btn {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+body.dark-mode .notification-popup {
+  background: #2a2a2a;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .notification-header {
+  border-bottom: 1px solid #444;
+}
+
+body.dark-mode .notification-item {
+  border-bottom: 1px solid #444;
+}
+
+body.dark-mode .notification-item:hover {
+  background: #333;
+}
+
+body.dark-mode .notification-item.unread {
+  background: #1a3a52;
+}
+
+body.dark-mode .notification-item.unread:hover {
+  background: #234b66;
+}
+
+body.dark-mode .notification-content h4 {
+  color: #fff;
+}
+
+body.dark-mode .notification-content p {
+  color: #bbb;
+}
+
+body.dark-mode .notification-time {
+  color: #888;
+}
+
+body.dark-mode .notification-empty {
+  color: #999;
 }

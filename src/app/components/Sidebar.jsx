@@ -7,7 +7,6 @@ import "./sidebar.css";
 import {
   Menu,
   Users,
-  Bell,
   ChevronDown,
   ChevronRight,
   LogOut
@@ -143,11 +142,6 @@ export default function Sidebar({
           >
             <Users />
             {open && <span>{isAdmin ? "Criar Turma" : "Criar Grupo"}</span>}
-          </div>
-
-          <div className="sidebar-item">
-            <Bell />
-            {open && <span>Notificação</span>}
           </div>
         </div>
 
