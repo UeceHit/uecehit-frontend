@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Pencil, Trash2 } from "lucide-react";
 import "./style.css";
 
-export default function ConsultarTurmas() {
+export default function ConsultarTurmas({ onClose }) {
   const router = useRouter();
   const [turmas, setTurmas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -115,50 +115,57 @@ export default function ConsultarTurmas() {
 
   return (
     <div className="consultar-turmas-container">
-      <div className="consultar-turmas-header">
-        <button onClick={() => router.back()} className="back-button">
-          ← Voltar
-        </button>
-        <h1>Consultar Turmas</h1>
-      </div>
+      <div className="consultar-panel">
+        <div className="panel-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <button onClick={() => onClose ? onClose() : router.back()} className="back-button">
+              ← Voltar
+            </button>
+            <h1>Consulta de Turmas</h1>
+          </div>
+        </div>
 
-      {loading ? (
-        <p className="loading-text">Carregando turmas...</p>
-      ) : (
-        <div className="turmas-list">
-          {turmas.length === 0 ? (
-            <p className="no-turmas">Nenhuma turma encontrada</p>
+        <div className="panel-body">
+          {loading ? (
+            <p className="loading-text">Carregando turmas...</p>
           ) : (
-            turmas.map((turma) => (
-              <div key={turma.id} className="turma-card">
-                <div className="turma-info">
-                  <h3>{turma.nome}</h3>
-                  <p className="turma-details">
-                    {turma.disciplina && <span>Disciplina: {turma.disciplina}</span>}
-                    {turma.curso && <span>Curso: {turma.curso}</span>}
-                  </p>
-                </div>
-                <div className="turma-actions">
-                  <button
-                    className="btn-edit"
-                    onClick={() => handleEditar(turma)}
-                    title="Editar turma"
-                  >
-                    <Pencil size={18} />
-                  </button>
-                  <button
-                    className="btn-delete"
-                    onClick={() => handleExcluir(turma.id)}
-                    title="Excluir turma"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              </div>
-            ))
+            <div className="turmas-list">
+              {turmas.length === 0 ? (
+                <p className="no-turmas">Nenhuma turma encontrada</p>
+              ) : (
+                turmas.map((turma) => (
+                  <div key={turma.id} className="turma-card">
+                    <div className="turma-info">
+                      <h3>{turma.nome}</h3>
+                      <p className="turma-details">
+                        {turma.disciplina && <span>Disciplina: {turma.disciplina}</span>}
+                        {turma.curso && <span>Curso: {turma.curso}</span>}
+                      </p>
+                    </div>
+                    <div className="turma-actions">
+                      <button
+                        className="btn-edit"
+                        onClick={() => handleEditar(turma)}
+                        title="Editar turma"
+                      >
+                        <Pencil size={14} />
+                        <span style={{ marginLeft: 8, fontSize: 13 }}>Editar</span>
+                      </button>
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleExcluir(turma.id)}
+                        title="Excluir turma"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           )}
         </div>
-      )}
+      </div>
 
       {/* POPUP DE EDIÇÃO */}
       {showEditPopup && turmaEditando && (
