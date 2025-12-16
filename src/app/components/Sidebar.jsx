@@ -24,6 +24,7 @@ export default function Sidebar({
   showTurmasGrupos = true,
   showConsultarTurmas = false,
   isAdmin = false,
+  onConsultarTurmas = null, // optional callback when clicking Consultar Turmas
   onCriarGrupoClick = null // Nova prop opcional para customizar comportamento
 }) {
   const [open, setOpen] = useState(false);
@@ -212,7 +213,7 @@ export default function Sidebar({
         {showConsultarTurmas && (
           <div
             className="sidebar-footer consult-center"
-            onClick={() => router.push("/consultar-turmas")}
+            onClick={() => onConsultarTurmas ? onConsultarTurmas() : router.push("/consultar-turmas")}
           >
             {open && <span>Consultar Turmas</span>}
           </div>
