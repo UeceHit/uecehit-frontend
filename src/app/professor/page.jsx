@@ -5,9 +5,9 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Calendar from "../components/Calendar";
 import CalendarViewSwitcher from "../components/CalendarViewSwitcher";
-import "./aluno.css";
+import "./professor.css";
 
-export default function AlunoDashboard() {
+export default function ProfessorDashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Estado que controla o tipo de visualização
@@ -32,6 +32,7 @@ export default function AlunoDashboard() {
             "Organização de Computadores",
           ]}
           grupos={["Banca TCC", "PET"]}
+          showConsultarPresenca={false} // Ocultar botão de consultar presença
         />
 
 

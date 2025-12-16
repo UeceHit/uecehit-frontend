@@ -1,0 +1,9 @@
+/* Modo escuro - Calendário Universitário */
+body.dark-mode .calendar-info {
+  color: #ffffff;
+}
+
+/* Garantir que o fundo da página também fique escuro */
+body.dark-mode {
+  background-color: #1a1a1a !important;
+}

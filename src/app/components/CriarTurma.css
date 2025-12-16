@@ -1,0 +1,124 @@
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.popup-criar-turma {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.popup-criar-turma h2 {
+  margin: 0 0 25px 0;
+  color: #333;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.form-field {
+  margin-bottom: 20px;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.form-field input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'Noto Sans Gujarati', sans-serif;
+  box-sizing: border-box;
+}
+
+.form-field input:focus {
+  outline: none;
+  border-color: #3366cc;
+}
+
+.popup-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.btn-cancelar,
+.btn-criar {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-family: 'Noto Sans Gujarati', sans-serif;
+}
+
+.btn-cancelar {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.btn-cancelar:hover {
+  background: #d0d0d0;
+}
+
+.btn-criar {
+  background: #3366cc;
+  color: white;
+}
+
+.btn-criar:hover {
+  background: #2850a8;
+}
+
+.btn-criar:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* MODO ESCURO */
+body.dark-mode .popup-criar-turma {
+  background: #2a2a2a;
+}
+
+body.dark-mode .popup-criar-turma h2 {
+  color: #ffffff;
+}
+
+body.dark-mode .form-field label {
+  color: #cccccc;
+}
+
+body.dark-mode .form-field input {
+  background: #1a1a1a;
+  border-color: #444;
+  color: #ffffff;
+}
+
+body.dark-mode .btn-cancelar {
+  background: #444;
+  color: #ffffff;
+}
+
+body.dark-mode .btn-cancelar:hover {
+  background: #555;
+}

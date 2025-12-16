@@ -5,9 +5,9 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Calendar from "../components/Calendar";
 import CalendarViewSwitcher from "../components/CalendarViewSwitcher";
-import "./aluno.css";
+import "./administrador.css";
 
-export default function AlunoDashboard() {
+export default function AdministradorDashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Estado que controla o tipo de visualização
@@ -26,12 +26,12 @@ export default function AlunoDashboard() {
         <Sidebar
           isOpen={isSidebarOpen}
           setIsOpen={setIsSidebarOpen}
-          turmas={[
-            "Inteligência Computacional",
-            "Banco de Dados",
-            "Organização de Computadores",
-          ]}
-          grupos={["Banca TCC", "PET"]}
+          turmas={[]} // Administrador não tem turmas
+          grupos={[]} // Administrador não tem grupos
+          showConsultarPresenca={false} // Sem botão de consultar presença
+          showTurmasGrupos={false} // Ocultar seções de turmas e grupos
+          showConsultarTurmas={true} // Mostrar botão de consultar turmas
+          isAdmin={true} // Indica que é administrador (muda "Criar Grupo" para "Criar Turma")
         />
 
 

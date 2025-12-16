@@ -1,0 +1,262 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700&display=swap');
+
+.consultar-turmas-container {
+  font-family: 'Noto Sans Gujarati', sans-serif;
+  padding: 40px;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.consultar-turmas-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.back-button {
+  background: #3366cc;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.back-button:hover {
+  background: #2850a8;
+}
+
+.consultar-turmas-header h1 {
+  font-size: 32px;
+  color: #333;
+  margin: 0;
+}
+
+.loading-text {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  margin-top: 50px;
+}
+
+.no-turmas {
+  text-align: center;
+  font-size: 18px;
+  color: #999;
+  margin-top: 50px;
+}
+
+.turmas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 900px;
+}
+
+.turma-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.turma-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.turma-info h3 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.turma-details {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.turma-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-edit,
+.btn-delete {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-edit {
+  color: #3366cc;
+}
+
+.btn-edit:hover {
+  background: #e6f0ff;
+}
+
+.btn-delete {
+  color: #C64139;
+}
+
+.btn-delete:hover {
+  background: #ffe6e6;
+}
+
+/* POPUP DE EDIÇÃO */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-box {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.popup-box h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 24px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'Noto Sans Gujarati', sans-serif;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #3366cc;
+}
+
+.popup-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.btn-cancel,
+.btn-save {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-family: 'Noto Sans Gujarati', sans-serif;
+}
+
+.btn-cancel {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.btn-cancel:hover {
+  background: #d0d0d0;
+}
+
+.btn-save {
+  background: #3366cc;
+  color: white;
+}
+
+.btn-save:hover {
+  background: #2850a8;
+}
+
+/* MODO ESCURO */
+body.dark-mode .consultar-turmas-container {
+  background-color: #1a1a1a;
+}
+
+body.dark-mode .consultar-turmas-header h1 {
+  color: #ffffff;
+}
+
+body.dark-mode .turma-card {
+  background: #2a2a2a;
+  color: #ffffff;
+}
+
+body.dark-mode .turma-info h3 {
+  color: #ffffff;
+}
+
+body.dark-mode .turma-details {
+  color: #cccccc;
+}
+
+body.dark-mode .popup-box {
+  background: #2a2a2a;
+}
+
+body.dark-mode .popup-box h2 {
+  color: #ffffff;
+}
+
+body.dark-mode .form-group label {
+  color: #cccccc;
+}
+
+body.dark-mode .form-group input {
+  background: #1a1a1a;
+  border-color: #444;
+  color: #ffffff;
+}
+
+body.dark-mode .btn-cancel {
+  background: #444;
+  color: #ffffff;
+}
+
+body.dark-mode .btn-cancel:hover {
+  background: #555;
+}
