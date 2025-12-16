@@ -267,3 +267,104 @@ body.dark-mode .popup-close {
   font-size: 15px;
   color: #424040;
 }
+
+/* ========================= */
+/* 📌 POPUP VISUALIZAR EVENTO */
+/* ========================= */
+
+.popup-visualizar-evento {
+  width: 500px;
+  background: #EFECEC;
+  border-radius: 14px;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  font-family: "Noto Sans Gujarati", sans-serif;
+}
+
+.evento-titulo {
+  margin: 0 0 24px 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #424040;
+  text-align: left;
+}
+
+.evento-info {
+  margin-bottom: 24px;
+}
+
+.evento-info p {
+  margin: 8px 0;
+  font-size: 15px;
+  color: #424040;
+  font-weight: 400;
+}
+
+.evento-data,
+.evento-horario,
+.evento-local {
+  margin: 10px 0;
+}
+
+.evento-filtros {
+  margin: 24px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filtro-tag {
+  display: inline-block;
+  background: #D9D9D9;
+  color: #424040;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn-deletar-evento {
+  width: 100%;
+  background: #C64139;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background 0.3s;
+  font-family: "Noto Sans Gujarati", sans-serif;
+}
+
+.btn-deletar-evento:hover {
+  background: #a83531;
+}
+
+/* MODO ESCURO - POPUP VISUALIZAR */
+body.dark-mode .popup-visualizar-evento {
+  background: #373636;
+}
+
+body.dark-mode .evento-titulo {
+  color: #ffffff;
+}
+
+body.dark-mode .evento-info p {
+  color: #ffffff;
+}
+
+body.dark-mode .filtro-tag {
+  background: #555;
+  color: #ffffff;
+}
+
+body.dark-mode .btn-deletar-evento {
+  background: #C64139;
+}
+
+body.dark-mode .btn-deletar-evento:hover {
+  background: #a83531;
+}

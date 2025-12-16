@@ -418,34 +418,42 @@ export default function Calendar({ view = "mês", setView }) {
   function PopupVisualizarEvento({ event, onClose }) {
   if (!event) return null;
 
+  // Função para formatar o nome da categoria
+  const formatarCategoria = (categoria) => {
+    const categorias = {
+      'pessoal': 'Pessoal',
+      'reuniao': 'Reunião',
+      'provas': 'Provas',
+      'atividades_academicas': 'Atividades Acadêmicas'
+    };
+    return categorias[categoria] || categoria || 'Sem categoria';
+  };
+
   return (
-    <div className="popup-overlay">
-      <div className="popup-card" role="dialog" aria-modal="true">
+    <div className="popup-overlay" onClick={onClose}>
+      <div className="popup-visualizar-evento" onClick={(e) => e.stopPropagation()}>
         <button className="popup-close" onClick={onClose}>✕</button>
 
-        <h2 className="popup-title">{event.name}</h2>
+        <h2 className="evento-titulo">{event.name}</h2>
 
-        <p><strong>Data:</strong> {event.date.toLocaleDateString()}</p>
-        <p><strong>Horário:</strong> {event.time || "Não informado"}</p>
-        <p><strong>Local:</strong> {event.local || "Não informado"}</p>
-        <p><strong>Categoria:</strong> {event.categoria || "—"}</p>
-
-        {event.grupo && (
-          <p><strong>Grupo:</strong> {event.grupo}</p>
-        )}
-
-        <div style={{ marginTop: 20, display: "flex", justifyContent: "flex-end" }}>
-          <button className="btn-cancel" onClick={onClose}>
-            Fechar
-          </button>
-
-          <button
-            className="btn-save"
-            style={{ background: "#D9534F", marginLeft: 10 }}
-          >
-            Deletar Evento
-          </button>
+        <div className="evento-info">
+          <p className="evento-data">Data: {event.date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
+          <p className="evento-horario">Horário: {event.time || "10:00"}</p>
+          <p className="evento-local">Local: {event.local || "Mini Auditório NCSA"}</p>
         </div>
+
+        <div className="evento-filtros">
+          <span className="filtro-tag">{formatarCategoria(event.categoria)}</span>
+        </div>
+
+        <button className="btn-deletar-evento" onClick={() => {
+          if (confirm('Deseja realmente deletar este evento?')) {
+            // TODO: implementar deleção
+            onClose();
+          }
+        }}>
+          Deletar Evento
+        </button>
       </div>
     </div>
   );
