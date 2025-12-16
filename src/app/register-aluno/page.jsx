@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import "./style.css";
 import Link from "next/link";
@@ -13,6 +13,14 @@ export default function RegisterAluno() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // Aplicar classe ao body quando o componente montar
+  useEffect(() => {
+    document.body.classList.add('register-aluno-active');
+    return () => {
+      document.body.classList.remove('register-aluno-active');
+    };
+  }, []);
 
   const cursos = [
     "Ciência da Computação - Bacharelado - Diurno",

@@ -22,7 +22,8 @@
   background: #e3e3e3;
   border-right: 1px solid #c9c9c9;
   transition: width 0.25s ease-in-out;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   z-index: 10;

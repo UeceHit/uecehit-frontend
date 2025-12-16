@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./style.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -7,6 +7,14 @@ import { useRouter } from "next/navigation";
 export default function RegisterSelectAffiliation() {
   const [value, setValue] = useState("");
   const router = useRouter();
+
+  // Aplicar classe ao body quando o componente montar
+  useEffect(() => {
+    document.body.classList.add('register-select-active');
+    return () => {
+      document.body.classList.remove('register-select-active');
+    };
+  }, []);
 
   function handleNext() {
     if (!value) {
