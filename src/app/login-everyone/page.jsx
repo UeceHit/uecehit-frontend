@@ -60,27 +60,35 @@ export default function LoginPage() {
       
       console.log('Resposta completa da API:', data);
       
-      // Extrair o token do objeto de resposta
-      const token = data.access_token || data.token || data;
-      
-      console.log('Token extraído:', token);
-      console.log('Tipo do token:', typeof token);
+      // Extrair o token e dados do usuário
+      const token = data.access_token;
+      const user = data.user;
       
       if (!token || typeof token !== 'string') {
         console.error('Token inválido recebido:', token);
         throw new Error('Token inválido recebido do servidor');
       }
       
-      // Salvar com a chave correta que o Calendar.jsx está buscando
+      // Salvar token
       localStorage.setItem("access_token", token);
+      localStorage.setItem("token_type", data.token_type || "bearer");
       
       console.log('Token salvo no localStorage');
-      console.log('Verificando se foi salvo:', localStorage.getItem("access_token"));
+      console.log('Dados do usuário:', user);
       
-      // Também manter a chave antiga por compatibilidade (opcional)
-      localStorage.setItem("authToken", token);
-      
-      router.push("/aluno");
+      // Redirecionar baseado no papel do usuário
+      if (user && user.papel) {
+        if (user.papel === 'professor') {
+          router.push("/professor");
+        } else if (user.papel === 'administrador') {
+          router.push("/administrador");
+        } else {
+          router.push("/aluno");
+        }
+      } else {
+        // Se não houver papel, redireciona para aluno como fallback
+        router.push("/aluno");
+      }
 
     } catch (err) {
       console.error('Erro no login:', err);
