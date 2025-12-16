@@ -12,19 +12,34 @@
 }
 
 .popup-criar-turma {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: #e9e6e6;
+  padding: 20px;
+  border-radius: 10px;
+  width: 94%;
+  max-width: 980px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0,0,0,0.06);
+  position: relative;
+}
+
+.modal-large { padding: 26px; }
+
+.modal-close {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #666;
 }
 
 .popup-criar-turma h2 {
-  margin: 0 0 25px 0;
-  color: #333;
-  font-size: 24px;
-  font-weight: 600;
+  margin: 6px 0 18px 0;
+  color: #222;
+  font-size: 26px;
+  font-weight: 700;
 }
 
 .form-field {
@@ -39,13 +54,15 @@
   font-size: 14px;
 }
 
-.form-field input {
+.form-field input,
+.form-field select {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
+  padding: 12px 14px;
+  border: 1px solid rgba(0,0,0,0.08);
   border-radius: 8px;
-  font-size: 16px;
-  font-family: 'Noto Sans Gujarati', sans-serif;
+  font-size: 15px;
+  background: #fff;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.03) inset;
   box-sizing: border-box;
 }
 
@@ -54,13 +71,54 @@
   border-color: #3366cc;
 }
 
-.popup-buttons {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  margin-top: 30px;
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+  align-items: start;
 }
 
+.modal-left { }
+.modal-right { }
+
+.select-large select { height: 160px; }
+
+.aluno-row { display:flex; gap:10px; align-items:center }
+.btn-add {
+  background: #2f2d7a;
+  color: #fff;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.alunos-list { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px }
+.aluno-chip { background:#fff; padding:6px 10px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.06); font-size:13px }
+
+.modal-actions {
+  grid-column: 1 / -1;
+  display:flex;
+  justify-content:flex-end;
+  gap:12px;
+  margin-top:18px;
+}
+
+.btn-cancelar,
+.btn-criar {
+  padding: 12px 26px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.btn-cancelar { background: transparent; color:#444 }
+.btn-criar { background:#2f2d7a; color:#fff }
+
+.btn-criar:disabled { opacity:0.6; cursor:not-allowed }
 .btn-cancelar,
 .btn-criar {
   padding: 12px 24px;

@@ -48,7 +48,17 @@ export default function ConsultarTurmas({ onClose }) {
   }
 
   function handleEditar(turma) {
-    setTurmaEditando(turma);
+    // normalize fields for editing
+    setTurmaEditando({
+      id: turma.id,
+      nome: turma.nome || "",
+      disciplina: turma.disciplina || "",
+      curso: turma.curso || "",
+      bloco: turma.bloco || "",
+      horario: turma.horario || "",
+      alunos: turma.alunos || [],
+      professor_email: turma.professor_email || turma.professorEmail || ""
+    });
     setShowEditPopup(true);
   }
 
@@ -82,21 +92,27 @@ export default function ConsultarTurmas({ onClose }) {
 
   async function handleSalvarEdicao(e) {
     e.preventDefault();
-    
+
     try {
       const token = localStorage.getItem('access_token');
-      
+
+      const payload = {
+        nome: turmaEditando.nome,
+        disciplina: turmaEditando.disciplina,
+        curso: turmaEditando.curso,
+        bloco: turmaEditando.bloco,
+        horario: turmaEditando.horario,
+        alunos: turmaEditando.alunos,
+        professor_email: turmaEditando.professor_email
+      };
+
       const response = await fetch(`https://api.uecehit.com.br/api/turmas/${turmaEditando.id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          nome: turmaEditando.nome,
-          disciplina: turmaEditando.disciplina,
-          curso: turmaEditando.curso
-        })
+        body: JSON.stringify(payload)
       });
 
       if (response.ok) {
@@ -105,12 +121,25 @@ export default function ConsultarTurmas({ onClose }) {
         setTurmaEditando(null);
         carregarTurmas();
       } else {
-        alert('Erro ao atualizar turma');
+        const err = await response.json().catch(() => ({}));
+        alert(`Erro ao atualizar turma: ${err.detail || err.message || 'Erro desconhecido'}`);
       }
     } catch (error) {
       console.error('Erro ao atualizar turma:', error);
       alert('Erro ao atualizar turma');
     }
+  }
+
+  function handleAddAlunoEdit(e) {
+    e && e.preventDefault();
+    if (!turmaEditando) return;
+    const email = (turmaEditando._newAluno || "").trim();
+    if (!email) return;
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      alert('Email inválido');
+      return;
+    }
+    setTurmaEditando((t) => ({ ...t, alunos: [...(t.alunos||[]), email], _newAluno: '' }));
   }
 
   return (
@@ -170,41 +199,87 @@ export default function ConsultarTurmas({ onClose }) {
       {/* POPUP DE EDIÇÃO */}
       {showEditPopup && turmaEditando && (
         <div className="popup-overlay" onClick={() => setShowEditPopup(false)}>
-          <div className="popup-box" onClick={(e) => e.stopPropagation()}>
+          <div className="popup-criar-turma modal-large" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setShowEditPopup(false)}>✕</button>
             <h2>Editar Turma</h2>
-            <form onSubmit={handleSalvarEdicao}>
-              <div className="form-group">
-                <label>Nome da Turma</label>
-                <input
-                  type="text"
-                  value={turmaEditando.nome}
-                  onChange={(e) => setTurmaEditando({...turmaEditando, nome: e.target.value})}
-                  required
-                />
+
+            <form onSubmit={handleSalvarEdicao} className="modal-grid">
+              <div className="modal-left">
+                <div className="form-field">
+                  <label>Nome da Turma:</label>
+                  <input
+                    type="text"
+                    value={turmaEditando.nome}
+                    onChange={(e) => setTurmaEditando({...turmaEditando, nome: e.target.value})}
+                    required
+                  />
+                </div>
+
+                <div className="form-field">
+                  <label>Bloco:</label>
+                  <input
+                    type="text"
+                    value={turmaEditando.bloco || ''}
+                    onChange={(e) => setTurmaEditando({...turmaEditando, bloco: e.target.value})}
+                  />
+                </div>
+
+                <div className="form-field select-large">
+                  <label>Selecionar Curso:</label>
+                  <select value={turmaEditando.curso || ''} onChange={(e) => setTurmaEditando({...turmaEditando, curso: e.target.value})}>
+                    <option value="">-- Selecione --</option>
+                    <option>Ciência da Computação - Bacharelado - Diurno</option>
+                    <option>Medicina - Bacharelado - Integral</option>
+                    <option>Direito - Bacharelado - Noturno</option>
+                    <option>Matemática - Licenciatura - Noturno</option>
+                  </select>
+                </div>
+
+                <div className="form-field aluno-add">
+                  <label>Escreva o email institucional do aluno:</label>
+                  <div className="aluno-row">
+                    <input
+                      type="email"
+                      value={turmaEditando._newAluno || ''}
+                      onChange={(e) => setTurmaEditando({...turmaEditando, _newAluno: e.target.value})}
+                      placeholder="Escreva o email institucional do aluno:"
+                    />
+                    <button className="btn-add" onClick={handleAddAlunoEdit} title="Adicionar aluno">+</button>
+                  </div>
+                  <div className="alunos-list">
+                    {(turmaEditando.alunos||[]).map((a, i) => (
+                      <div key={i} className="aluno-chip">{a}</div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="form-field">
+                  <label>Escreva o email institucional do professor:</label>
+                  <input
+                    type="email"
+                    value={turmaEditando.professor_email || ''}
+                    onChange={(e) => setTurmaEditando({...turmaEditando, professor_email: e.target.value})}
+                    placeholder="Escreva o email institucional do professor:"
+                  />
+                </div>
               </div>
-              <div className="form-group">
-                <label>Disciplina</label>
-                <input
-                  type="text"
-                  value={turmaEditando.disciplina || ''}
-                  onChange={(e) => setTurmaEditando({...turmaEditando, disciplina: e.target.value})}
-                />
+
+              <div className="modal-right">
+                <div className="form-field">
+                  <label>Horário da Turma</label>
+                  <select value={turmaEditando.horario || ''} onChange={(e) => setTurmaEditando({...turmaEditando, horario: e.target.value})}>
+                    <option value="">-- Selecione --</option>
+                    <option>AB - Manhã</option>
+                    <option>CD - Manhã</option>
+                    <option>EF - Manhã</option>
+                    <option>AB - Tarde</option>
+                  </select>
+                </div>
               </div>
-              <div className="form-group">
-                <label>Curso</label>
-                <input
-                  type="text"
-                  value={turmaEditando.curso || ''}
-                  onChange={(e) => setTurmaEditando({...turmaEditando, curso: e.target.value})}
-                />
-              </div>
-              <div className="popup-buttons">
-                <button type="button" onClick={() => setShowEditPopup(false)} className="btn-cancel">
-                  Cancelar
-                </button>
-                <button type="submit" className="btn-save">
-                  Salvar
-                </button>
+
+              <div className="modal-actions">
+                <button type="button" onClick={() => setShowEditPopup(false)} className="btn-cancelar">Cancelar</button>
+                <button type="submit" className="btn-criar">Salvar</button>
               </div>
             </form>
           </div>

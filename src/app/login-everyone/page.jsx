@@ -72,6 +72,13 @@ export default function LoginPage() {
       // Salvar token
       localStorage.setItem("access_token", token);
       localStorage.setItem("token_type", data.token_type || "bearer");
+      // Salvar dados do usuário para checagens futuras (papel etc.)
+      try {
+        localStorage.setItem('user', JSON.stringify(user));
+        if (user && user.papel) localStorage.setItem('user_papel', user.papel);
+      } catch (e) {
+        console.warn('Não foi possível salvar dados do usuário no localStorage', e);
+      }
       
       console.log('Token salvo no localStorage');
       console.log('Dados do usuário:', user);
