@@ -392,6 +392,13 @@ export default function Calendar({ view = "mês", setView }) {
             <option>Mensal</option>
           </select>
 
+          <select className="popup-input" value={turma} onChange={e=>setTurma(e.target.value)}>
+            <option value="">Selecionar grupo/turma</option>
+            <option value="inteligencia_computacional">Inteligência Computacional</option>
+            <option value="banco_de_dados">Banco de Dados</option>
+            <option value="organizacao_de_computadores">Organização de Computadores</option>
+          </select>
+
           <div style={{display:"flex", justifyContent:"flex-end", marginTop:14}}>
             <button className="btn-cancel" onClick={()=>setShowPopup(false)} disabled={salvando}>Cancelar</button>
             <button className="btn-save" onClick={salvar} disabled={salvando}>

@@ -1,18 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Moon, Sun } from "lucide-react";
 import "./header.css";
 
 export default function Header() {
-  const [dark, setDark] = useState(false);
-
-  // 🔹 Sincroniza com o body quando o componente monta
-  useEffect(() => {
-    const isDark = document.body.classList.contains("dark-mode");
-    setDark(isDark);
-  }, []);
+  const [dark, setDark] = useState(() => {
+    try {
+      return typeof document !== "undefined" && document.body.classList.contains("dark-mode");
+    } catch {
+      return false;
+    }
+  });
 
   function toggleTheme() {
     document.body.classList.toggle("dark-mode");

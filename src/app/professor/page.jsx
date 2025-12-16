@@ -5,13 +5,24 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Calendar from "../components/Calendar";
 import CalendarViewSwitcher from "../components/CalendarViewSwitcher";
+import CriarGrupoProfessor from "../components/CriarGrupoProfessor";
 import "./professor.css";
 
 export default function ProfessorDashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  // Estado que controla o tipo de visualização
   const [view, setView] = useState("mês");
+  const [showCriarGrupo, setShowCriarGrupo] = useState(false);
+
+  const turmas = [
+    "Inteligência Computacional",
+    "Banco de Dados",
+    "Organização de Computadores",
+  ];
+
+  const handleCreateGrupo = (grupoObj) => {
+    console.log('Grupo criado:', grupoObj);
+    setShowCriarGrupo(false);
+  };
 
   return (
     <div>
@@ -26,13 +37,10 @@ export default function ProfessorDashboard() {
         <Sidebar
           isOpen={isSidebarOpen}
           setIsOpen={setIsSidebarOpen}
-          turmas={[
-            "Inteligência Computacional",
-            "Banco de Dados",
-            "Organização de Computadores",
-          ]}
+          turmas={turmas}
           grupos={["Banca TCC", "PET"]}
-          showConsultarPresenca={false} // Ocultar botão de consultar presença
+          showConsultarPresenca={false}
+          onCriarGrupoClick={() => setShowCriarGrupo(true)}
         />
 
 
@@ -84,6 +92,15 @@ export default function ProfessorDashboard() {
           </div>
         </div>
       </div>
+
+      {/* POPUP CRIAR GRUPO PROFESSOR */}
+      {showCriarGrupo && (
+        <CriarGrupoProfessor
+          onClose={() => setShowCriarGrupo(false)}
+          onCreate={handleCreateGrupo}
+          turmas={turmas}
+        />
+      )}
     </div>
   );
 }
