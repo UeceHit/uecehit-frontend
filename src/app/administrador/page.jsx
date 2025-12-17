@@ -29,26 +29,25 @@ export default function AdministradorDashboard() {
         <Sidebar
           isOpen={isSidebarOpen}
           setIsOpen={setIsSidebarOpen}
-          turmas={[]} // Administrador não tem turmas
-          grupos={[]} // Administrador não tem grupos
-          showConsultarPresenca={false} // Sem botão de consultar presença
-          showTurmasGrupos={false} // Ocultar seções de turmas e grupos
-          showConsultarTurmas={true} // Mostrar botão de consultar turmas
+          turmas={[]}
+          grupos={[]}
+          showConsultarPresenca={false}
+          showTurmasGrupos={false}
+          showConsultarTurmas={true}
           onConsultarTurmas={() => setShowConsultarTurmas(true)}
-          isAdmin={true} // Indica que é administrador (muda "Criar Grupo" para "Criar Turma")
+          isAdmin={true}
         />
 
 
         {/* CONTEÚDO PRINCIPAL */}
         <div className="main-content">
-          {/* CONTEÚDO: mostra calendário ou a tela de consultar turmas */}
           {showConsultarTurmas ? (
             <div style={{ flex: 1 }}>
               <ConsultarTurmas onClose={() => setShowConsultarTurmas(false)} />
             </div>
           ) : (
             <>
-              {/* CALENDÁRIO À ESQUERDA */}
+              {/* CALENDÁRIO */}
               <div
                 style={{
                   flex: 1,
@@ -61,7 +60,7 @@ export default function AdministradorDashboard() {
                 <Calendar view={view} setView={setView} />
               </div>
 
-              {/* SWITCHER E INFO À DIREITA */}
+              {/* SWITCHER E INFO */}
               <div
                 style={{
                   width: "250px",
