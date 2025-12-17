@@ -1,18 +1,8 @@
-/* ========================= */
-/* 📌 IMPORTAÇÃO DAS FONTES */
-/* ========================= */
-
 @import url("https://fonts.googleapis.com/css2?family=Nova+Flat&display=swap");
 
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600&display=swap");
 
-
-
-/* ========================= */
-/* 📌 ESTILOS DO CALENDÁRIO */
-/* ========================= */
-
-
+/* ESTILOS DO CALENDÁRIO */
 
 .calendar-wrapper {
   width: 100%;
@@ -121,9 +111,7 @@
   .popup-card { width:92%; padding:18px; }
 }
 
-/* ========================= */
-/* 🌙 MODO ESCURO — CALENDÁRIO */
-/* ========================= */
+/* MODO ESCURO — CALENDÁRIO */
 
 body.dark-mode {
   background-color: #1a1a1a !important;
@@ -189,7 +177,7 @@ body.dark-mode .selected-indicator {
   background: #3B8CF6;
 }
 
-/* 🔵 BOTÃO CRIAR */
+/* BOTÃO CRIAR */
 body.dark-mode .create-btn {
   background: #3B8CF6;
   color: white;
@@ -268,9 +256,7 @@ body.dark-mode .popup-close {
   color: #424040;
 }
 
-/* ========================= */
-/* 📌 POPUP VISUALIZAR EVENTO */
-/* ========================= */
+/* POPUP VISUALIZAR EVENTO */
 
 .popup-visualizar-evento {
   width: 500px;
